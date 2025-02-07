@@ -2125,7 +2125,9 @@ public class LogItemInfo {
     );
     // Note: This drop rate assumes you own all essence pouches or a colossal pouch.
     public static LogItemInfo INTRICATE_POUCH_26908 = new LogItemInfo("Intricate pouch", 26908,
-            new BinomialDrop(new RollInfo(LogItemSourceInfo.RIFTS_SEARCHES, 1.0 / 25)));
+            // Actually, the player can only obtain one of these.
+//            new BinomialDrop(new RollInfo(LogItemSourceInfo.RIFTS_SEARCHES, 1.0 / 25)));
+            new MissingKillCountDrop());
     public static LogItemInfo IORWERTH_CAMP_TELEPORT_12410 = new LogItemInfo("Iorwerth camp teleport", 12410,
             new PoissonBinomialStackDrop());
     public static LogItemInfo IRON_BOOTS_4121 = new LogItemInfo("Iron boots", 4121,
