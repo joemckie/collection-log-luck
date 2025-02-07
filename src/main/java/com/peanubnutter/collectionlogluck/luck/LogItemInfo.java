@@ -245,7 +245,7 @@ public class LogItemInfo {
             new DeterministicDrop());
     public static LogItemInfo ANCIENT_HILT_26370 = new LogItemInfo("Ancient hilt", 26370,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.NEX_KILLS, 1.0 / 516))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_NEX_REWARDS_FRACTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_NEX_CONTRIBUTION_KEY)
     );
     public static LogItemInfo ANCIENT_ICON_27627 = new LogItemInfo("Ancient icon", 27627,
             // includes chance from frozen cache(s)
@@ -956,7 +956,7 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.CALLISTO_KILLS, 1.0 / 2000),
                     new RollInfo(LogItemSourceInfo.ARTIO_KILLS, 1.0 / 2800)
             ))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_CALLISTO_REWARDS_FRACTION_KEY));
+                    .withConfigOption(CollectionLogLuckConfig.AVG_CALLISTO_CONTRIBUTION_KEY));
     public static LogItemInfo CAMO_BOTTOMS_6655 = new LogItemInfo("Camo bottoms", 6655,
             new MissingKillCountDrop());
     public static LogItemInfo CAMO_HELMET_6656 = new LogItemInfo("Camo helmet", 6656,
@@ -1045,7 +1045,7 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.CALLISTO_KILLS, 1.0 / 196),
                     new RollInfo(LogItemSourceInfo.ARTIO_KILLS, 1.0 / 618)
             ))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_CALLISTO_REWARDS_FRACTION_KEY));
+                    .withConfigOption(CollectionLogLuckConfig.AVG_CALLISTO_CONTRIBUTION_KEY));
     public static LogItemInfo CLIMBING_BOOTS_G_23413 = new LogItemInfo("Climbing boots (g)", 23413,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.MEDIUM_CLUES_COMPLETED, 1.0 / 1133, 4)));
     public static LogItemInfo CLOTHES_POUCH_BLUEPRINT_28166 = new LogItemInfo("Clothes pouch blueprint", 28166,
@@ -1075,7 +1075,7 @@ public class LogItemInfo {
             new DeterministicDrop());
     public static LogItemInfo CRYSTAL_TOOL_SEED_23953 = new LogItemInfo("Crystal tool seed", 23953,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.ZALCANO_KILLS, 1.0 / 200))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_ZALCANO_REWARDS_FRACTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_ZALCANO_CONTRIBUTION_KEY)
     );
     // Note: this can be bought from the LMS shop, and it appears to count towards the collection log.
     public static LogItemInfo CRYSTAL_WEAPON_SEED_4207 = new LogItemInfo("Crystal weapon seed", 4207,
@@ -1257,9 +1257,9 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.CALVARION_KILLS, 1.0 / 358),
                     new RollInfo(LogItemSourceInfo.SPINDEL_KILLS, 1.0 / 358)
             ))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_CALLISTO_REWARDS_FRACTION_KEY)
-                    .withConfigOption(CollectionLogLuckConfig.AVG_VENENATIS_REWARDS_FRACTION_KEY)
-                    .withConfigOption(CollectionLogLuckConfig.AVG_VETION_REWARDS_FRACTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_CALLISTO_CONTRIBUTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_VENENATIS_CONTRIBUTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_VETION_CONTRIBUTION_KEY)
     );
     public static LogItemInfo DRAGON_AXE_6739 = new LogItemInfo("Dragon axe", 6739,
             new PoissonBinomialDrop(ImmutableList.of(
@@ -1329,9 +1329,9 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.SPINDEL_KILLS, 1.0 / 358),
                     new RollInfo(LogItemSourceInfo.KALPHITE_QUEEN_KILLS, 1.0 / 400)
             ))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_CALLISTO_REWARDS_FRACTION_KEY)
-                    .withConfigOption(CollectionLogLuckConfig.AVG_VENENATIS_REWARDS_FRACTION_KEY)
-                    .withConfigOption(CollectionLogLuckConfig.AVG_VETION_REWARDS_FRACTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_CALLISTO_CONTRIBUTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_VENENATIS_CONTRIBUTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_VETION_CONTRIBUTION_KEY)
                     .withConfigOption(CollectionLogLuckConfig.KQ_KC_PRE_D_PICK_BUFF_KEY)
                     .withConfigOption(CollectionLogLuckConfig.KBD_KC_PRE_D_PICK_BUFF_KEY)
     );
@@ -1394,7 +1394,7 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.PHOSANIS_NIGHTMARE_KILLS, 1.0 / 1600)
             ))
                     .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_TEAM_SIZE_KEY)
-                    .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_REWARDS_FRACTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_CONTRIBUTION_KEY)
                     .withConfigOption(CollectionLogLuckConfig.NIGHTMARE_KC_PRE_BUFF_KEY)
                     .withConfigOption(CollectionLogLuckConfig.PHOSANIS_NIGHTMARE_KC_PRE_BUFF_KEY)
     );
@@ -1461,7 +1461,7 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.VENENATIS_KILLS, 1.0 / 196),
                     new RollInfo(LogItemSourceInfo.SPINDEL_KILLS, 1.0 / 618)
             ))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_VENENATIS_REWARDS_FRACTION_KEY));
+                    .withConfigOption(CollectionLogLuckConfig.AVG_VENENATIS_CONTRIBUTION_KEY));
     public static LogItemInfo FARMERS_BOOTS_13644 = new LogItemInfo("Farmer's boots", 13644,
             new DeterministicDrop());
     public static LogItemInfo FARMERS_BORO_TROUSERS_13640 = new LogItemInfo("Farmer's boro trousers", 13640,
@@ -1940,7 +1940,7 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.PHOSANIS_NIGHTMARE_KILLS, 1.0 / 1600)
             ))
                     .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_TEAM_SIZE_KEY)
-                    .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_REWARDS_FRACTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_CONTRIBUTION_KEY)
                     .withConfigOption(CollectionLogLuckConfig.NIGHTMARE_KC_PRE_BUFF_KEY)
                     .withConfigOption(CollectionLogLuckConfig.PHOSANIS_NIGHTMARE_KC_PRE_BUFF_KEY)
     );
@@ -2069,7 +2069,7 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.PHOSANIS_NIGHTMARE_KILLS, 1.0 / 700)
             ))
                     .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_TEAM_SIZE_KEY)
-                    .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_REWARDS_FRACTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_CONTRIBUTION_KEY)
                     .withConfigOption(CollectionLogLuckConfig.NIGHTMARE_KC_PRE_BUFF_KEY)
                     .withConfigOption(CollectionLogLuckConfig.PHOSANIS_NIGHTMARE_KC_PRE_BUFF_KEY)
     );
@@ -2085,7 +2085,7 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.PHOSANIS_NIGHTMARE_KILLS, 1.0 / 700)
             ))
                     .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_TEAM_SIZE_KEY)
-                    .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_REWARDS_FRACTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_CONTRIBUTION_KEY)
                     .withConfigOption(CollectionLogLuckConfig.NIGHTMARE_KC_PRE_BUFF_KEY)
                     .withConfigOption(CollectionLogLuckConfig.PHOSANIS_NIGHTMARE_KC_PRE_BUFF_KEY)
     );
@@ -2101,7 +2101,7 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.PHOSANIS_NIGHTMARE_KILLS, 1.0 / 1250)
             ))
                     .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_TEAM_SIZE_KEY)
-                    .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_REWARDS_FRACTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_CONTRIBUTION_KEY)
                     .withConfigOption(CollectionLogLuckConfig.NIGHTMARE_KC_PRE_BUFF_KEY)
                     .withConfigOption(CollectionLogLuckConfig.PHOSANIS_NIGHTMARE_KC_PRE_BUFF_KEY)
     );
@@ -2117,7 +2117,7 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.PHOSANIS_NIGHTMARE_KILLS, 1.0 / 700)
             ))
                     .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_TEAM_SIZE_KEY)
-                    .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_REWARDS_FRACTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_CONTRIBUTION_KEY)
                     .withConfigOption(CollectionLogLuckConfig.NIGHTMARE_KC_PRE_BUFF_KEY)
                     .withConfigOption(CollectionLogLuckConfig.PHOSANIS_NIGHTMARE_KC_PRE_BUFF_KEY)
     );
@@ -2601,9 +2601,9 @@ public class LogItemInfo {
     public static LogItemInfo NEXLING_26348 = new LogItemInfo("Nexling", 26348,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.NEX_KILLS, 1.0 / 500))
                     // We don't actually know exactly how much of a bonus MVPing gives to the Nex pet, but assuming it's
-                    // 10% multiplicatively just like uniques, we can just use the rewards fraction as if it's
-                    // a normal drop since the MVP rate is included in the rewards fraction
-                    .withConfigOption(CollectionLogLuckConfig.AVG_NEX_REWARDS_FRACTION_KEY)
+                    // 10% multiplicatively just like uniques, we can just use the contribution as if it's
+                    // a normal drop since the MVP rate is included in the contribution
+                    .withConfigOption(CollectionLogLuckConfig.AVG_NEX_CONTRIBUTION_KEY)
     );
     public static LogItemInfo NIGHTMARE_STAFF_24422 = new LogItemInfo("Nightmare staff", 24422,
             new PoissonBinomialDrop(ImmutableList.of(
@@ -2617,13 +2617,13 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.PHOSANIS_NIGHTMARE_KILLS, 1.0 / 533)
             ))
                     .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_TEAM_SIZE_KEY)
-                    .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_REWARDS_FRACTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_CONTRIBUTION_KEY)
                     .withConfigOption(CollectionLogLuckConfig.NIGHTMARE_KC_PRE_BUFF_KEY)
                     .withConfigOption(CollectionLogLuckConfig.PHOSANIS_NIGHTMARE_KC_PRE_BUFF_KEY)
     );
     public static LogItemInfo NIHIL_HORN_26372 = new LogItemInfo("Nihil horn", 26372,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.NEX_KILLS, 1.0 / 258))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_NEX_REWARDS_FRACTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_NEX_CONTRIBUTION_KEY)
     );
     public static LogItemInfo NIHIL_SHARD_26231 = new LogItemInfo("Nihil shard", 26231,
             new PoissonBinomialStackDrop());
@@ -2922,7 +2922,7 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.VETION_KILLS, 1.0 / 512),
                     new RollInfo(LogItemSourceInfo.CALVARION_KILLS, 1.0 / 716)
             ))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_VETION_REWARDS_FRACTION_KEY));
+                    .withConfigOption(CollectionLogLuckConfig.AVG_VETION_CONTRIBUTION_KEY));
     public static LogItemInfo ROBE_BOTTOMS_OF_THE_EYE_26854 = new LogItemInfo("Robe bottoms of the eye", 26854,
             new DeterministicDrop());
     public static LogItemInfo ROBE_BOTTOM_OF_DARKNESS_20137 = new LogItemInfo("Robe bottom of darkness", 20137,
@@ -3271,7 +3271,7 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.VETION_KILLS, 1.0 / 196),
                     new RollInfo(LogItemSourceInfo.CALVARION_KILLS, 1.0 / 618)
             ))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_VETION_REWARDS_FRACTION_KEY));
+                    .withConfigOption(CollectionLogLuckConfig.AVG_VETION_CONTRIBUTION_KEY));
     public static LogItemInfo SLEEPING_CAP_10398 = new LogItemInfo("Sleeping cap", 10398,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.EASY_CLUES_COMPLETED, 1.0 / 1404, 3)));
     public static LogItemInfo SLEPEY_TABLET_25837 = new LogItemInfo("Slepey tablet", 25837,
@@ -3457,22 +3457,22 @@ public class LogItemInfo {
             new BinomialDrop(new RollInfo(LogItemSourceInfo.MASTER_CLUES_COMPLETED, 1.0 / 851, 6)));
     public static LogItemInfo TORVA_FULL_HELM_DAMAGED_26376 = new LogItemInfo("Torva full helm (damaged)", 26376,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.NEX_KILLS, 1.0 / 258))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_NEX_REWARDS_FRACTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_NEX_CONTRIBUTION_KEY)
     );
     public static LogItemInfo TORVA_PLATEBODY_DAMAGED_26378 = new LogItemInfo("Torva platebody (damaged)", 26378,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.NEX_KILLS, 1.0 / 258))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_NEX_REWARDS_FRACTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_NEX_CONTRIBUTION_KEY)
     );
     public static LogItemInfo TORVA_PLATELEGS_DAMAGED_26380 = new LogItemInfo("Torva platelegs (damaged)", 26380,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.NEX_KILLS, 1.0 / 258))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_NEX_REWARDS_FRACTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_NEX_CONTRIBUTION_KEY)
     );
     public static LogItemInfo TREASONOUS_RING_12605 = new LogItemInfo("Treasonous ring", 12605,
             new PoissonBinomialDrop(ImmutableList.of(
                     new RollInfo(LogItemSourceInfo.VENENATIS_KILLS, 1.0 / 512),
                     new RollInfo(LogItemSourceInfo.SPINDEL_KILLS, 1.0 / 716)
             ))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_VENENATIS_REWARDS_FRACTION_KEY));
+                    .withConfigOption(CollectionLogLuckConfig.AVG_VENENATIS_CONTRIBUTION_KEY));
     public static LogItemInfo TREASURE_FLAG_8970 = new LogItemInfo("Treasure flag", 8970,
             new DeterministicDrop());
     public static LogItemInfo TREE_WIZARDS_JOURNAL_25474 = new LogItemInfo("Tree wizards' journal", 25474,
@@ -3522,7 +3522,7 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.CALLISTO_KILLS, 1.0 / 512),
                     new RollInfo(LogItemSourceInfo.ARTIO_KILLS, 1.0 / 716)
             ))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_CALLISTO_REWARDS_FRACTION_KEY));
+                    .withConfigOption(CollectionLogLuckConfig.AVG_CALLISTO_CONTRIBUTION_KEY));
     public static LogItemInfo TZHAAR_KET_OM_6528 = new LogItemInfo("Tzhaar-ket-om", 6528,
             new MissingKillCountDrop());
     public static LogItemInfo TZHAAR_KET_OM_ORNAMENT_KIT_23232 = new LogItemInfo("Tzhaar-ket-om ornament kit", 23232,
@@ -3565,7 +3565,7 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.VENENATIS_KILLS, 1.0 / 2000),
                     new RollInfo(LogItemSourceInfo.SPINDEL_KILLS, 1.0 / 2800)
             ))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_VENENATIS_REWARDS_FRACTION_KEY));
+                    .withConfigOption(CollectionLogLuckConfig.AVG_VENENATIS_CONTRIBUTION_KEY));
     public static LogItemInfo VERACS_BRASSARD_4757 = new LogItemInfo("Verac's brassard", 4757,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.BARROWS_CHESTS_OPENED, 1.0 / 2448, 7))
                     .withConfigOption(CollectionLogLuckConfig.NUM_INVALID_BARROWS_KC_KEY));
@@ -3620,19 +3620,19 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.VETION_KILLS, 1.0 / 360),
                     new RollInfo(LogItemSourceInfo.CALVARION_KILLS, 1.0 / 912)
             ))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_VETION_REWARDS_FRACTION_KEY));
+                    .withConfigOption(CollectionLogLuckConfig.AVG_VETION_CONTRIBUTION_KEY));
     public static LogItemInfo VOIDWAKER_GEM_27687 = new LogItemInfo("Voidwaker gem", 27687,
             new PoissonBinomialDrop(ImmutableList.of(
                     new RollInfo(LogItemSourceInfo.VENENATIS_KILLS, 1.0 / 360),
                     new RollInfo(LogItemSourceInfo.SPINDEL_KILLS, 1.0 / 912)
             ))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_VENENATIS_REWARDS_FRACTION_KEY));
+                    .withConfigOption(CollectionLogLuckConfig.AVG_VENENATIS_CONTRIBUTION_KEY));
     public static LogItemInfo VOIDWAKER_HILT_27681 = new LogItemInfo("Voidwaker hilt", 27681,
             new PoissonBinomialDrop(ImmutableList.of(
                     new RollInfo(LogItemSourceInfo.CALLISTO_KILLS, 1.0 / 360),
                     new RollInfo(LogItemSourceInfo.ARTIO_KILLS, 1.0 / 912)
             ))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_CALLISTO_REWARDS_FRACTION_KEY));
+                    .withConfigOption(CollectionLogLuckConfig.AVG_CALLISTO_CONTRIBUTION_KEY));
     public static LogItemInfo VOID_KNIGHT_GLOVES_8842 = new LogItemInfo("Void knight gloves", 8842,
             new DeterministicDrop());
     public static LogItemInfo VOID_KNIGHT_MACE_8841 = new LogItemInfo("Void knight mace", 8841,
@@ -3661,7 +3661,7 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.PHOSANIS_NIGHTMARE_KILLS, 1.0 / 1600)
             ))
                     .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_TEAM_SIZE_KEY)
-                    .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_REWARDS_FRACTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_CONTRIBUTION_KEY)
                     .withConfigOption(CollectionLogLuckConfig.NIGHTMARE_KC_PRE_BUFF_KEY)
                     .withConfigOption(CollectionLogLuckConfig.PHOSANIS_NIGHTMARE_KC_PRE_BUFF_KEY)
     );
@@ -3826,7 +3826,7 @@ public class LogItemInfo {
             new BinomialDrop(new RollInfo(LogItemSourceInfo.HARD_CLUES_COMPLETED, 1.0 / 1625, 5)));
     public static LogItemInfo ZARYTE_VAMBRACES_26235 = new LogItemInfo("Zaryte vambraces", 26235,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.NEX_KILLS, 1.0 / 172))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_NEX_REWARDS_FRACTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_NEX_CONTRIBUTION_KEY)
     );
     public static LogItemInfo ZEALOTS_BOOTS_25440 = new LogItemInfo("Zealot's boots", 25440,
             new MissingKillCountDrop());
@@ -4017,7 +4017,7 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.VETION_KILLS, 1.0 / 2000),
                     new RollInfo(LogItemSourceInfo.CALVARION_KILLS, 1.0 / 2800)
             ))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_VETION_REWARDS_FRACTION_KEY));
+                    .withConfigOption(CollectionLogLuckConfig.AVG_VETION_CONTRIBUTION_KEY));
     public static LogItemInfo WARPED_SCEPTRE_UNCHARGED_28583 = new LogItemInfo("Warped sceptre (uncharged)", 28583,
             new MissingKillCountDrop());
     public static LogItemInfo FARMERS_SHIRT_13643 = new LogItemInfo("Farmer's shirt", 13643,
@@ -4191,12 +4191,12 @@ public class LogItemInfo {
     public static LogItemInfo PENDANT_OF_ATES_INERT_29892 = new LogItemInfo("Pendant of ates (inert)",29892, new MissingKillCountDrop());
     public static LogItemInfo FROZEN_TEAR_29895 = new LogItemInfo("Frozen tear",29895, new MissingKillCountDrop());
     public static LogItemInfo BRAN_30622 = new LogItemInfo("Bran",30622, new UnimplementedDrop());
-    public static LogItemInfo DEADEYE_PRAYER_SCROLL_30626 = new LogItemInfo("Deadeye prayer scroll",30626, new UnimplementedDrop());
-    public static LogItemInfo MYSTIC_VIGOUR_PRAYER_SCROLL_30627 = new LogItemInfo("Mystic vigour prayer scroll",30627, new UnimplementedDrop());
+    public static LogItemInfo DEADEYE_PRAYER_SCROLL_30626 = new LogItemInfo("Deadeye prayer scroll",30626, new MissingKillCountDrop());
+    public static LogItemInfo MYSTIC_VIGOUR_PRAYER_SCROLL_30627 = new LogItemInfo("Mystic vigour prayer scroll",30627, new MissingKillCountDrop());
     public static LogItemInfo GIANTSOUL_AMULET_UNCHARGED_30637 = new LogItemInfo("Giantsoul amulet (uncharged)",30637, new UnimplementedDrop());
-    public static LogItemInfo ICE_ELEMENT_STAFF_CROWN_30628 = new LogItemInfo("Ice element staff crown",30628, new UnimplementedDrop());
-    public static LogItemInfo FIRE_ELEMENT_STAFF_CROWN_30631 = new LogItemInfo("Fire element staff crown",30631, new UnimplementedDrop());
-    public static LogItemInfo DESICCATED_PAGE_30640 = new LogItemInfo("Desiccated page",30640, new UnimplementedDrop());
+    public static LogItemInfo ICE_ELEMENT_STAFF_CROWN_30628 = new LogItemInfo("Ice element staff crown",30628, new MissingKillCountDrop());
+    public static LogItemInfo FIRE_ELEMENT_STAFF_CROWN_30631 = new LogItemInfo("Fire element staff crown",30631, new MissingKillCountDrop());
+    public static LogItemInfo DESICCATED_PAGE_30640 = new LogItemInfo("Desiccated page",30640, new MissingKillCountDrop());
     public static LogItemInfo HUBERTE_30152 = new LogItemInfo("Huberte",30152, new UnimplementedDrop());
     public static LogItemInfo DRAGON_HUNTER_WAND_30070 = new LogItemInfo("Dragon hunter wand",30070, new UnimplementedDrop());
     public static LogItemInfo TOME_OF_EARTH_EMPTY_30066 = new LogItemInfo("Tome of earth (empty)",30066, new UnimplementedDrop());
@@ -4210,9 +4210,9 @@ public class LogItemInfo {
     public static LogItemInfo ALCHEMISTS_AMULET_29990 = new LogItemInfo("Alchemist's amulet",29990, new DeterministicDrop());
     public static LogItemInfo REAGENT_POUCH_29996 = new LogItemInfo("Reagent pouch",29996, new DeterministicDrop());
     public static LogItemInfo CHUGGING_BARREL_DISASSEMBLED__30002 = new LogItemInfo("Chugging barrel (disassembled)",30002, new DeterministicDrop());
-    public static LogItemInfo COLOSSAL_WYRM_TELEPORT_SCROLL_30040 = new LogItemInfo("Colossal wyrm teleport scroll",30040, new UnimplementedDrop());
-    public static LogItemInfo CALCIFIED_ACORN_30042 = new LogItemInfo("Calcified acorn",30042, new UnimplementedDrop());
-    public static LogItemInfo BROKEN_ZOMBIE_HELMET_30324 = new LogItemInfo("Broken zombie helmet",30324, new UnimplementedDrop());
+    public static LogItemInfo COLOSSAL_WYRM_TELEPORT_SCROLL_30040 = new LogItemInfo("Colossal wyrm teleport scroll",30040, new DeterministicDrop());
+    public static LogItemInfo CALCIFIED_ACORN_30042 = new LogItemInfo("Calcified acorn",30042, new DeterministicDrop());
+    public static LogItemInfo BROKEN_ZOMBIE_HELMET_30324 = new LogItemInfo("Broken zombie helmet",30324, new MissingKillCountDrop());
     public static LogItemInfo PENDANT_OF_ATES_INERT__29892 = new LogItemInfo("Pendant of ates (inert)",29892, new MissingKillCountDrop());
 
 

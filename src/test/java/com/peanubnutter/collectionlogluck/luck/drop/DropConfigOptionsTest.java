@@ -555,7 +555,7 @@ public class DropConfigOptionsTest {
             }
 
             @Override
-            public double avgNightmareRewardsFraction() {
+            public double avgNightmareContribution() {
                 return 0.5 * 1.05;
             }
         };
@@ -565,7 +565,7 @@ public class DropConfigOptionsTest {
                 new RollInfo(LogItemSourceInfo.PHOSANIS_NIGHTMARE_KILLS, 1.0 / 2000)
         ))
                 .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_TEAM_SIZE_KEY)
-                .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_REWARDS_FRACTION_KEY);
+                .withConfigOption(CollectionLogLuckConfig.AVG_NIGHTMARE_CONTRIBUTION_KEY);
 
         CollectionLogItem mockItem = new CollectionLogItem(1234, "some item name", numObtained, true, 0);
 
@@ -611,7 +611,7 @@ public class DropConfigOptionsTest {
 
             @Override
             // This is purposely set way too high to check that the pet drop is not affected by contribution
-            public double avgNightmareRewardsFraction() {
+            public double avgNightmareContribution() {
                 return 0.5;
             }
         };
@@ -668,7 +668,7 @@ public class DropConfigOptionsTest {
 
             @Override
             // MVP half the time
-            public double avgNightmareRewardsFraction() {
+            public double avgNightmareContribution() {
                 return 0.5 * (1 + 0.5 * 1.05);
             }
         };
@@ -714,13 +714,13 @@ public class DropConfigOptionsTest {
 
         CollectionLogLuckConfig config = new CollectionLogLuckConfig() {
             @Override
-            public double avgNexRewardsFraction() {
+            public double avgNexContribution() {
                 return 0.25 * 1.1;
             }
         };
 
         AbstractDrop drop = new BinomialDrop(new RollInfo(LogItemSourceInfo.NEX_KILLS, 1.0 / 258))
-                .withConfigOption(CollectionLogLuckConfig.AVG_NEX_REWARDS_FRACTION_KEY);
+                .withConfigOption(CollectionLogLuckConfig.AVG_NEX_CONTRIBUTION_KEY);
 
         CollectionLogItem mockItem = new CollectionLogItem(1234, "some item name", numObtained, true, 0);
 
@@ -807,13 +807,13 @@ public class DropConfigOptionsTest {
 
         CollectionLogLuckConfig config = new CollectionLogLuckConfig() {
             @Override
-            public double avgZalcanoRewardsFraction() {
+            public double avgZalcanoContribution() {
                 return 0.33333333;
             }
         };
 
         AbstractDrop drop = new BinomialDrop(new RollInfo(LogItemSourceInfo.ZALCANO_KILLS, 1.0 / 200))
-                .withConfigOption(CollectionLogLuckConfig.AVG_ZALCANO_REWARDS_FRACTION_KEY);
+                .withConfigOption(CollectionLogLuckConfig.AVG_ZALCANO_CONTRIBUTION_KEY);
 
         CollectionLogItem mockItem = new CollectionLogItem(1234, "some item name", numObtained, true, 0);
 
@@ -1173,17 +1173,17 @@ public class DropConfigOptionsTest {
 
         CollectionLogLuckConfig config = new CollectionLogLuckConfig() {
             @Override
-            public double avgCallistoRewardsFraction() {
+            public double avgCallistoContribution() {
                 return callistoContributionRate;
             }
 
             @Override
-            public double avgVenenatisRewardsFraction() {
+            public double avgVenenatisContribution() {
                 return venenatisContributionRate;
             }
 
             @Override
-            public double avgVetionRewardsFraction() {
+            public double avgVetionContribution() {
                 return vetionContributionRate;
             }
 
@@ -1212,9 +1212,9 @@ public class DropConfigOptionsTest {
                 new RollInfo(LogItemSourceInfo.SPINDEL_KILLS, 1.0 / 358),
                 new RollInfo(LogItemSourceInfo.KALPHITE_QUEEN_KILLS, 1.0 / 400)
         ))
-                .withConfigOption(CollectionLogLuckConfig.AVG_CALLISTO_REWARDS_FRACTION_KEY)
-                .withConfigOption(CollectionLogLuckConfig.AVG_VENENATIS_REWARDS_FRACTION_KEY)
-                .withConfigOption(CollectionLogLuckConfig.AVG_VETION_REWARDS_FRACTION_KEY)
+                .withConfigOption(CollectionLogLuckConfig.AVG_CALLISTO_CONTRIBUTION_KEY)
+                .withConfigOption(CollectionLogLuckConfig.AVG_VENENATIS_CONTRIBUTION_KEY)
+                .withConfigOption(CollectionLogLuckConfig.AVG_VETION_CONTRIBUTION_KEY)
                 .withConfigOption(CollectionLogLuckConfig.KQ_KC_PRE_D_PICK_BUFF_KEY)
                 .withConfigOption(CollectionLogLuckConfig.KBD_KC_PRE_D_PICK_BUFF_KEY);
 

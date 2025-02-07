@@ -23,17 +23,17 @@ public interface CollectionLogLuckConfig extends Config
 	String REGULAR_TOA_UNIQUE_CHANCE_KEY = "regular_toa_unique_chance";
 	String EXPERT_TOA_UNIQUE_CHANCE_KEY = "expert_toa_unique_chance";
 	String AVG_NIGHTMARE_TEAM_SIZE_KEY = "avg_nightmare_team_size";
-	String AVG_NIGHTMARE_REWARDS_FRACTION_KEY = "avg_nightmare_rewards_fraction";
-	String AVG_NEX_REWARDS_FRACTION_KEY = "avg_nex_rewards_fraction";
-	String AVG_ZALCANO_REWARDS_FRACTION_KEY = "avg_zalcano_rewards_fraction";
+	String AVG_NIGHTMARE_CONTRIBUTION_KEY = "avg_nightmare_contribution";
+	String AVG_NEX_CONTRIBUTION_KEY = "avg_nex_contribution";
+	String AVG_ZALCANO_CONTRIBUTION_KEY = "avg_zalcano_contribution";
 	String AVG_ZALCANO_POINTS_KEY = "avg_zalcano_points";
 	String NUM_FIRE_CAPES_SACRIFICED_KEY = "num_fire_capes_sacrificed";
 	String NUM_INFERNAL_CAPES_SACRIFICED_KEY = "num_infernal_capes_sacrificed";
 	String NUM_DIZANAS_QUIVERS_SACRIFICED_KEY = "num_dizanas_quivers_sacrificed";
 	String NUM_ARAXXOR_DESTROYED_KEY = "num_araxxor_destroyed";
-	String AVG_CALLISTO_REWARDS_FRACTION_KEY = "avg_callisto_rewards_fraction";
-	String AVG_VENENATIS_REWARDS_FRACTION_KEY = "avg_venenatis_rewards_fraction";
-	String AVG_VETION_REWARDS_FRACTION_KEY = "avg_vetion_rewards_fraction";
+	String AVG_CALLISTO_CONTRIBUTION_KEY = "avg_callisto_contribution";
+	String AVG_VENENATIS_CONTRIBUTION_KEY = "avg_venenatis_contribution";
+	String AVG_VETION_CONTRIBUTION_KEY = "avg_vetion_contribution";
 	String AVG_SCURRIUS_MVP_RATE_KEY = "avg_scurrius_mvp_rate";
 	String NUM_ABYSSAL_LANTERNS_PURCHASED_KEY = "num_abyssal_lanterns_purchased";
 	String NUM_CRYSTAL_WEAPON_SEEDS_PURCHASED_KEY = "num_crystal_weapon_seeds_purchased";
@@ -232,64 +232,64 @@ public interface CollectionLogLuckConfig extends Config
 	}
 
 	@ConfigItem(
-			keyName = AVG_NIGHTMARE_REWARDS_FRACTION_KEY,
-			name = "Nightmare rewards fraction",
+			keyName = AVG_NIGHTMARE_CONTRIBUTION_KEY,
+			name = "Nightmare contribution",
 			description = "Avg. fraction (0 to 1) of contribution to killing The Nightmare of Ashihama." +
 					" This should include MVP bonuses, so multiply by 1.05 if always MVP, or less accordingly.",
 			position = 21,
 			section = luckSection
 	)
-	default double avgNightmareRewardsFraction() {
+	default double avgNightmareContribution() {
 		// average MVP rate of 20% with an average contribution on a 5-man team
 		return 0.202;
 	}
 
 	@ConfigItem(
-			keyName = AVG_NEX_REWARDS_FRACTION_KEY,
-			name = "Nex rewards fraction",
+			keyName = AVG_NEX_CONTRIBUTION_KEY,
+			name = "Nex contribution",
 			description = "Avg. fraction (0 to 1) of contribution to killing Nex." +
 					" This should include MVP bonuses, so multiply by 1.1 if always MVP, or less accordingly.",
 			position = 22,
 			section = luckSection
 	)
-	default double avgNexRewardsFraction() {
+	default double avgNexContribution() {
 		// average MVP rate of 20% with an average contribution on a 5-man team
 		return 0.204;
 	}
 
 	@ConfigItem(
-			keyName = AVG_CALLISTO_REWARDS_FRACTION_KEY,
-			name = "Callisto rewards fraction",
+			keyName = AVG_CALLISTO_CONTRIBUTION_KEY,
+			name = "Callisto contribution",
 			description = "Avg. fraction (0 to 1) of contribution to killing Callisto." +
 					" Set to 0.1 if team size >= 10, or 1 if soloing.",
 			position = 23,
 			section = luckSection
 	)
-	default double avgCallistoRewardsFraction() {
+	default double avgCallistoContribution() {
 		return 0.2;
 	}
 
 	@ConfigItem(
-			keyName = AVG_VENENATIS_REWARDS_FRACTION_KEY,
-			name = "Venenatis rewards fraction",
+			keyName = AVG_VENENATIS_CONTRIBUTION_KEY,
+			name = "Venenatis contribution",
 			description = "Avg. fraction (0 to 1) of contribution to killing Venenatis." +
 					" Set to 0.1 if team size >= 10, or 1 if soloing.",
 			position = 24,
 			section = luckSection
 	)
-	default double avgVenenatisRewardsFraction() {
+	default double avgVenenatisContribution() {
 		return 0.5;
 	}
 
 	@ConfigItem(
-			keyName = AVG_VETION_REWARDS_FRACTION_KEY,
-			name = "Vet'ion rewards fraction",
+			keyName = AVG_VETION_CONTRIBUTION_KEY,
+			name = "Vet'ion contribution",
 			description = "Avg. fraction (0 to 1) of contribution to killing Vet'ion." +
 					" Set to 0.1 if team size >= 10, or 1 if soloing.",
 			position = 25,
 			section = luckSection
 	)
-	default double avgVetionRewardsFraction() {
+	default double avgVetionContribution() {
 		return 0.5;
 	}
 
@@ -306,13 +306,13 @@ public interface CollectionLogLuckConfig extends Config
 	}
 
 	@ConfigItem(
-			keyName = AVG_ZALCANO_REWARDS_FRACTION_KEY,
-			name = "Zalcano rewards fraction",
+			keyName = AVG_ZALCANO_CONTRIBUTION_KEY,
+			name = "Zalcano contribution",
 			description = "Avg. fraction (0 to 1) of contribution to killing Zalcano, taking into account team size.",
 			position = 27,
 			section = luckSection
 	)
-	default double avgZalcanoRewardsFraction() {
+	default double avgZalcanoContribution() {
 		// 4 man is most efficient
 		return 0.25;
 	}

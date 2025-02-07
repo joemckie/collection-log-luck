@@ -194,9 +194,9 @@ public abstract class AbstractDrop implements DropLuck {
         else if (
                 rollInfo.getDropSource().equals(LogItemSourceInfo.NIGHTMARE_KILLS)
                         && configOptions.contains(CollectionLogLuckConfig.AVG_NIGHTMARE_TEAM_SIZE_KEY)
-                        && configOptions.contains(CollectionLogLuckConfig.AVG_NIGHTMARE_REWARDS_FRACTION_KEY)
+                        && configOptions.contains(CollectionLogLuckConfig.AVG_NIGHTMARE_CONTRIBUTION_KEY)
         ) {
-            dropChance *= getNightmareUniqueShare(config.avgNightmareTeamSize(), config.avgNightmareRewardsFraction());
+            dropChance *= getNightmareUniqueShare(config.avgNightmareTeamSize(), config.avgNightmareContribution());
         }
         else if (
                 rollInfo.getDropSource().equals(LogItemSourceInfo.NIGHTMARE_KILLS)
@@ -212,18 +212,18 @@ public abstract class AbstractDrop implements DropLuck {
         }
         else if (
                 rollInfo.getDropSource().equals(LogItemSourceInfo.NEX_KILLS)
-                        && configOptions.contains(CollectionLogLuckConfig.AVG_NEX_REWARDS_FRACTION_KEY)
+                        && configOptions.contains(CollectionLogLuckConfig.AVG_NEX_CONTRIBUTION_KEY)
         ) {
             // It isn't very clear whether MVP chance is 10% more additively or multiplicatively. This assumes multiplicatively
-            // and the user is instructed to increase the rewardsFraction by 10% if they always MVP, so no additional
+            // and the user is instructed to increase the contribution by 10% if they always MVP, so no additional
             // calculation based on team size etc. is necessary.
-            dropChance *= clampContribution(config.avgNexRewardsFraction());
+            dropChance *= clampContribution(config.avgNexContribution());
         }
         else if (
                 rollInfo.getDropSource().equals(LogItemSourceInfo.ZALCANO_KILLS)
-                        && configOptions.contains(CollectionLogLuckConfig.AVG_ZALCANO_REWARDS_FRACTION_KEY)
+                        && configOptions.contains(CollectionLogLuckConfig.AVG_ZALCANO_CONTRIBUTION_KEY)
         ) {
-            dropChance *= clampContribution(config.avgZalcanoRewardsFraction());
+            dropChance *= clampContribution(config.avgZalcanoContribution());
         }
         else if (
                 rollInfo.getDropSource().equals(LogItemSourceInfo.ZALCANO_KILLS)
@@ -233,21 +233,21 @@ public abstract class AbstractDrop implements DropLuck {
         }
         else if (
                 rollInfo.getDropSource().equals(LogItemSourceInfo.CALLISTO_KILLS)
-                        && configOptions.contains(CollectionLogLuckConfig.AVG_CALLISTO_REWARDS_FRACTION_KEY)
+                        && configOptions.contains(CollectionLogLuckConfig.AVG_CALLISTO_CONTRIBUTION_KEY)
         ) {
-            dropChance *= clampContribution(config.avgCallistoRewardsFraction());
+            dropChance *= clampContribution(config.avgCallistoContribution());
         }
         else if (
                 rollInfo.getDropSource().equals(LogItemSourceInfo.VENENATIS_KILLS)
-                        && configOptions.contains(CollectionLogLuckConfig.AVG_VENENATIS_REWARDS_FRACTION_KEY)
+                        && configOptions.contains(CollectionLogLuckConfig.AVG_VENENATIS_CONTRIBUTION_KEY)
         ) {
-            dropChance *= clampContribution(config.avgVenenatisRewardsFraction());
+            dropChance *= clampContribution(config.avgVenenatisContribution());
         }
         else if (
                 rollInfo.getDropSource().equals(LogItemSourceInfo.VETION_KILLS)
-                        && configOptions.contains(CollectionLogLuckConfig.AVG_VETION_REWARDS_FRACTION_KEY)
+                        && configOptions.contains(CollectionLogLuckConfig.AVG_VETION_CONTRIBUTION_KEY)
         ) {
-            dropChance *= clampContribution(config.avgVetionRewardsFraction());
+            dropChance *= clampContribution(config.avgVetionContribution());
         }
         else if (
                 rollInfo.getDropSource().equals(LogItemSourceInfo.SCURRIUS_KILLS)
@@ -293,15 +293,15 @@ public abstract class AbstractDrop implements DropLuck {
     // overkill, and contribution could vary more or have a higher affect on unique rates than MVP rate. For example,
     // in a mixed group, a player with max gear could do 1.5x the DPS of others in the group, while the MVP rate
     // is only a 5% boost even if they MVP every time.
-    // Also, the user is instructed to increase the rewardsFraction by 5% if they always MVP, so it is still possible
+    // Also, the user is instructed to increase the contribution by 5% if they always MVP, so it is still possible
     // to correct the calculation in these cases.
-    private double getNightmareUniqueShare(double partySize, double rawRewardsFraction) {
+    private double getNightmareUniqueShare(double partySize, double rawContribution) {
         // chance for additional drop in large parties
         double uniqueChance = 1 + Math.max(0, Math.min(75, partySize - 5)) / 100.0;
 
-        double rewardsFraction = Math.max(0, Math.min(1, rawRewardsFraction));
+        double contribution = Math.max(0, Math.min(1, rawContribution));
 
-        return uniqueChance * rewardsFraction;
+        return uniqueChance * contribution;
     }
 
     private double getNightmareJarModifier(double partySize) {
