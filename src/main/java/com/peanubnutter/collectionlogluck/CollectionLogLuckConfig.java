@@ -25,7 +25,6 @@ public interface CollectionLogLuckConfig extends Config
 	String AVG_NIGHTMARE_TEAM_SIZE_KEY = "avg_nightmare_team_size";
 	String AVG_NIGHTMARE_REWARDS_FRACTION_KEY = "avg_nightmare_rewards_fraction";
 	String AVG_NEX_REWARDS_FRACTION_KEY = "avg_nex_rewards_fraction";
-	String NUM_ROLLS_PER_WINTERTODT_CRATE_KEY = "num_rolls_per_wintertodt_crate";
 	String AVG_ZALCANO_REWARDS_FRACTION_KEY = "avg_zalcano_rewards_fraction";
 	String AVG_ZALCANO_POINTS_KEY = "avg_zalcano_points";
 	String NUM_FIRE_CAPES_SACRIFICED_KEY = "num_fire_capes_sacrificed";
@@ -331,18 +330,6 @@ public interface CollectionLogLuckConfig extends Config
 	}
 
 	// ############### Misc minigames and minor bosses. ###############
-
-	@ConfigItem(
-			keyName = NUM_ROLLS_PER_WINTERTODT_CRATE_KEY,
-			name = "# Wintertodt Rolls",
-			description = "The number of rolls per Wintertodt supply crate. 500 pts = 2 rolls. 1k pts = 3 rolls, and so on. Can be a decimal.",
-			position = 30,
-			section = luckSection
-	)
-	default double numRollsPerWintertodtCrate()
-	{
-		return 2.5;
-	}
 
 	// Completing Barrows without killing all 6 brothers, for example if rapidly resetting to finish Barrows combat
 	// achievements, drastically reduces the chance of receiving unique loot. The player can configure an approximate

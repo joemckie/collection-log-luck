@@ -752,7 +752,7 @@ public class DropConfigOptionsTest {
         // equivalent to 4 drops
         int supremeKc = 128 * 4;
         // equivalent to 1 drop (at 2.5 rolls per crate)
-        int wintertodtKc = 4000;
+        int wintertodtKc = (int) (4000 * 2.5);
 
         // on drop rate.
         int numObtained = 1 + 2 + 3 + 4;
@@ -762,20 +762,14 @@ public class DropConfigOptionsTest {
         double expectedDryness = 0.417;
         double tolerance = 0.002;
 
-        CollectionLogLuckConfig config = new CollectionLogLuckConfig() {
-            @Override
-            public double numRollsPerWintertodtCrate() {
-                return 2.5;
-            }
-        };
+        CollectionLogLuckConfig config = new CollectionLogLuckConfig(){};
 
         AbstractDrop drop = new PoissonBinomialDrop(ImmutableList.of(
                 new RollInfo(LogItemSourceInfo.DAGANNOTH_PRIME_KILLS, 1.0 / 128),
                 new RollInfo(LogItemSourceInfo.DAGANNOTH_REX_KILLS, 1.0 / 128),
                 new RollInfo(LogItemSourceInfo.DAGANNOTH_SUPREME_KILLS, 1.0 / 128),
-                new RollInfo(LogItemSourceInfo.WINTERTODT_KILLS, 1.0 / 10000)
-        ))
-                .withConfigOption(CollectionLogLuckConfig.NUM_ROLLS_PER_WINTERTODT_CRATE_KEY);
+                new RollInfo(LogItemSourceInfo.REWARDS_CLAIMED, 1.0 / 10000)
+        ));
 
         CollectionLogItem mockItem = new CollectionLogItem(1234, "some item name", numObtained, true, 0);
 
@@ -783,7 +777,7 @@ public class DropConfigOptionsTest {
                 LogItemSourceInfo.DAGANNOTH_PRIME_KILLS.getName(), primeKc,
                 LogItemSourceInfo.DAGANNOTH_REX_KILLS.getName(), rexKc,
                 LogItemSourceInfo.DAGANNOTH_SUPREME_KILLS.getName(), supremeKc,
-                LogItemSourceInfo.WINTERTODT_KILLS.getName(), wintertodtKc);
+                LogItemSourceInfo.REWARDS_CLAIMED.getName(), wintertodtKc);
         CollectionLog mockCollectionLog = CollectionLogLuckTestUtils.getMockCollectionLogWithKcs(kcs);
 
         String incalculableReason = drop.getIncalculableReason(mockItem, config);

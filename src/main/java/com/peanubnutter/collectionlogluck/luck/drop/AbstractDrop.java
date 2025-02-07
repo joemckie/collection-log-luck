@@ -137,11 +137,6 @@ public abstract class AbstractDrop implements DropLuck {
     protected double getRollsPerKc(RollInfo rollInfo, CollectionLogLuckConfig config) {
         double rollsPerKc = rollInfo.getRollsPerKc();
 
-        if (rollInfo.getDropSource().equals(LogItemSourceInfo.WINTERTODT_KILLS)
-                && configOptions.contains(CollectionLogLuckConfig.NUM_ROLLS_PER_WINTERTODT_CRATE_KEY)) {
-            rollsPerKc *= config.numRollsPerWintertodtCrate();
-        }
-
         return rollsPerKc;
     }
 

@@ -930,8 +930,7 @@ public class LogItemInfo {
     public static LogItemInfo BRUMA_TORCH_20720 = new LogItemInfo("Bruma torch", 20720,
             // Note: This ignores the mechanic where torstol seeds are dropped instead if the player has > 3 torches.
             // Users will probably understand why their luck is lower than expected if they've purposely kept 3+...
-            new BinomialDrop(new RollInfo(LogItemSourceInfo.WINTERTODT_KILLS, 1.0 / 151.2))
-                    .withConfigOption(CollectionLogLuckConfig.NUM_ROLLS_PER_WINTERTODT_CRATE_KEY)
+            new BinomialDrop(new RollInfo(LogItemSourceInfo.REWARDS_CLAIMED, 1.0 / 151.2))
     );
     public static LogItemInfo BRYOPHYTAS_ESSENCE_22372 = new LogItemInfo("Bryophyta's essence", 22372,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.BRYOPHYTA_KILLS, 1.0 / 118)));
@@ -1267,9 +1266,8 @@ public class LogItemInfo {
                     new RollInfo(LogItemSourceInfo.DAGANNOTH_PRIME_KILLS, 1.0 / 128),
                     new RollInfo(LogItemSourceInfo.DAGANNOTH_REX_KILLS, 1.0 / 128),
                     new RollInfo(LogItemSourceInfo.DAGANNOTH_SUPREME_KILLS, 1.0 / 128),
-                    new RollInfo(LogItemSourceInfo.WINTERTODT_KILLS, 1.0 / 10000)
-            ))
-                    .withConfigOption(CollectionLogLuckConfig.NUM_ROLLS_PER_WINTERTODT_CRATE_KEY));
+                    new RollInfo(LogItemSourceInfo.REWARDS_CLAIMED, 1.0 / 10000)
+            )));
     public static LogItemInfo DRAGON_BOOTS_11840 = new LogItemInfo("Dragon boots", 11840,
             new MissingKillCountDrop());
     public static LogItemInfo DRAGON_BOOTS_ORNAMENT_KIT_22231 = new LogItemInfo("Dragon boots ornament kit", 22231,
@@ -2751,8 +2749,7 @@ public class LogItemInfo {
     public static LogItemInfo PHASMATYS_FLAG_8971 = new LogItemInfo("Phasmatys flag", 8971,
             new DeterministicDrop());
     public static LogItemInfo PHOENIX_20693 = new LogItemInfo("Phoenix", 20693,
-            new BinomialDrop(new RollInfo(LogItemSourceInfo.WINTERTODT_KILLS, 1.0 / 5000))
-                    .withConfigOption(CollectionLogLuckConfig.NUM_ROLLS_PER_WINTERTODT_CRATE_KEY)
+            new BinomialDrop(new RollInfo(LogItemSourceInfo.REWARDS_CLAIMED, 1.0 / 5000))
     );
     public static LogItemInfo PINK_BOATER_12309 = new LogItemInfo("Pink boater", 12309,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.MEDIUM_CLUES_COMPLETED, 1.0 / 1133, 4)));
@@ -2820,27 +2817,27 @@ public class LogItemInfo {
             new DeterministicDrop());
     public static LogItemInfo PYROMANCER_BOOTS_20710 = new LogItemInfo("Pyromancer boots", 20710,
             new DupeProtectedSetBinomialDrop(
-                    new RollInfo(LogItemSourceInfo.WINTERTODT_KILLS, 1.0 / 152.2 / 4.0),
+                    new RollInfo(LogItemSourceInfo.REWARDS_CLAIMED, 1.0 / 152.2 / 4.0),
                     ImmutableList.of(20710, 20704, 20708, 20706)
-            ).withConfigOption(CollectionLogLuckConfig.NUM_ROLLS_PER_WINTERTODT_CRATE_KEY)
+            )
     );
     public static LogItemInfo PYROMANCER_GARB_20704 = new LogItemInfo("Pyromancer garb", 20704,
             new DupeProtectedSetBinomialDrop(
-                    new RollInfo(LogItemSourceInfo.WINTERTODT_KILLS, 1.0 / 152.2 / 4.0),
+                    new RollInfo(LogItemSourceInfo.REWARDS_CLAIMED, 1.0 / 152.2 / 4.0),
                     ImmutableList.of(20710, 20704, 20708, 20706)
-            ).withConfigOption(CollectionLogLuckConfig.NUM_ROLLS_PER_WINTERTODT_CRATE_KEY)
+            )
     );
     public static LogItemInfo PYROMANCER_HOOD_20708 = new LogItemInfo("Pyromancer hood", 20708,
             new DupeProtectedSetBinomialDrop(
-                    new RollInfo(LogItemSourceInfo.WINTERTODT_KILLS, 1.0 / 152.2 / 4.0),
+                    new RollInfo(LogItemSourceInfo.REWARDS_CLAIMED, 1.0 / 152.2 / 4.0),
                     ImmutableList.of(20710, 20704, 20708, 20706)
-            ).withConfigOption(CollectionLogLuckConfig.NUM_ROLLS_PER_WINTERTODT_CRATE_KEY)
+            )
     );
     public static LogItemInfo PYROMANCER_ROBE_20706 = new LogItemInfo("Pyromancer robe", 20706,
             new DupeProtectedSetBinomialDrop(
-                    new RollInfo(LogItemSourceInfo.WINTERTODT_KILLS, 1.0 / 152.2 / 4.0),
+                    new RollInfo(LogItemSourceInfo.REWARDS_CLAIMED, 1.0 / 152.2 / 4.0),
                     ImmutableList.of(20710, 20704, 20708, 20706)
-            ).withConfigOption(CollectionLogLuckConfig.NUM_ROLLS_PER_WINTERTODT_CRATE_KEY)
+            )
     );
     public static LogItemInfo RAIN_BOW_23357 = new LogItemInfo("Rain bow", 23357,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.EASY_CLUES_COMPLETED, 1.0 / 1404, 3)));
@@ -3429,8 +3426,7 @@ public class LogItemInfo {
     public static LogItemInfo TOKTZ_XIL_UL_6522 = new LogItemInfo("Toktz-xil-ul", 6522,
             new MissingKillCountDrop());
     public static LogItemInfo TOME_OF_FIRE_EMPTY_20716 = new LogItemInfo("Tome of fire (empty)", 20716,
-            new BinomialDrop(new RollInfo(LogItemSourceInfo.WINTERTODT_KILLS, 1.0 / 1000.3))
-                    .withConfigOption(CollectionLogLuckConfig.NUM_ROLLS_PER_WINTERTODT_CRATE_KEY)
+            new BinomialDrop(new RollInfo(LogItemSourceInfo.REWARDS_CLAIMED, 1.0 / 1000.3))
     );
     public static LogItemInfo TOME_OF_WATER_EMPTY_25576 = new LogItemInfo("Tome of water (empty)", 25576,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.REWARD_PERMITS_CLAIMED, 1.0 / 1600)));
@@ -3682,8 +3678,7 @@ public class LogItemInfo {
     public static LogItemInfo WARM_GLOVES_20712 = new LogItemInfo("Warm gloves", 20712,
             // Note: This ignores the mechanic where magic seeds are dropped instead if the player has > 3 warm gloves.
             // Users will probably understand why their luck is lower than expected if they've purposely kept 3+...
-            new BinomialDrop(new RollInfo(LogItemSourceInfo.WINTERTODT_KILLS, 1.0 / 150.2))
-                    .withConfigOption(CollectionLogLuckConfig.NUM_ROLLS_PER_WINTERTODT_CRATE_KEY)
+            new BinomialDrop(new RollInfo(LogItemSourceInfo.REWARDS_CLAIMED, 1.0 / 150.2))
     );
     public static LogItemInfo WARRIOR_RING_6735 = new LogItemInfo("Warrior ring", 6735,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.DAGANNOTH_REX_KILLS, 1.0 / 128)));
