@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-// All 1524 collection log items as of 7/25/2024 and a mapping to their item IDs and drop mechanics / probabilities.
+// All 1568 collection log items as of 2/7/2025 and a mapping to their item IDs and drop mechanics / probabilities.
 public class LogItemInfo {
 
     // case-insensitive map, just in case
@@ -4185,6 +4185,36 @@ public class LogItemInfo {
             new DeterministicDrop());
     public static LogItemInfo ARANEA_BOOTS_29806 = new LogItemInfo("Aranea boots",29806,
             new MissingKillCountDrop());
+    public static LogItemInfo MOXI_30154 = new LogItemInfo("Moxi",30154,
+            new BinomialDrop(new RollInfo(LogItemSourceInfo.AMOXLIATL_KILLS, 1.0 / 3000)));
+    public static LogItemInfo GLACIAL_TEMOTLI_29889 = new LogItemInfo("Glacial temotli",29889, new MissingKillCountDrop());
+    public static LogItemInfo PENDANT_OF_ATES_INERT_29892 = new LogItemInfo("Pendant of ates (inert)",29892, new MissingKillCountDrop());
+    public static LogItemInfo FROZEN_TEAR_29895 = new LogItemInfo("Frozen tear",29895, new MissingKillCountDrop());
+    public static LogItemInfo BRAN_30622 = new LogItemInfo("Bran",30622, new UnimplementedDrop());
+    public static LogItemInfo DEADEYE_PRAYER_SCROLL_30626 = new LogItemInfo("Deadeye prayer scroll",30626, new UnimplementedDrop());
+    public static LogItemInfo MYSTIC_VIGOUR_PRAYER_SCROLL_30627 = new LogItemInfo("Mystic vigour prayer scroll",30627, new UnimplementedDrop());
+    public static LogItemInfo GIANTSOUL_AMULET_UNCHARGED_30637 = new LogItemInfo("Giantsoul amulet (uncharged)",30637, new UnimplementedDrop());
+    public static LogItemInfo ICE_ELEMENT_STAFF_CROWN_30628 = new LogItemInfo("Ice element staff crown",30628, new UnimplementedDrop());
+    public static LogItemInfo FIRE_ELEMENT_STAFF_CROWN_30631 = new LogItemInfo("Fire element staff crown",30631, new UnimplementedDrop());
+    public static LogItemInfo DESICCATED_PAGE_30640 = new LogItemInfo("Desiccated page",30640, new UnimplementedDrop());
+    public static LogItemInfo HUBERTE_30152 = new LogItemInfo("Huberte",30152, new UnimplementedDrop());
+    public static LogItemInfo DRAGON_HUNTER_WAND_30070 = new LogItemInfo("Dragon hunter wand",30070, new UnimplementedDrop());
+    public static LogItemInfo TOME_OF_EARTH_EMPTY_30066 = new LogItemInfo("Tome of earth (empty)",30066, new UnimplementedDrop());
+    public static LogItemInfo SOILED_PAGE_30068 = new LogItemInfo("Soiled page",30068, new UnimplementedDrop());
+    public static LogItemInfo HUEYCOATL_HIDE_30085 = new LogItemInfo("Hueycoatl hide",30085, new UnimplementedDrop());
+    public static LogItemInfo HUASCA_SEED_30088 = new LogItemInfo("Huasca seed",30088, new UnimplementedDrop());
+    public static LogItemInfo PRESCRIPTION_GOGGLES_29974 = new LogItemInfo("Prescription goggles",29974, new DeterministicDrop());
+    public static LogItemInfo ALCHEMIST_LABCOAT_29978 = new LogItemInfo("Alchemist labcoat",29978, new DeterministicDrop());
+    public static LogItemInfo ALCHEMIST_PANTS_29982 = new LogItemInfo("Alchemist pants",29982, new DeterministicDrop());
+    public static LogItemInfo ALCHEMIST_GLOVES_29986 = new LogItemInfo("Alchemist gloves",29986, new DeterministicDrop());
+    public static LogItemInfo ALCHEMISTS_AMULET_29990 = new LogItemInfo("Alchemist's amulet",29990, new DeterministicDrop());
+    public static LogItemInfo REAGENT_POUCH_29996 = new LogItemInfo("Reagent pouch",29996, new DeterministicDrop());
+    public static LogItemInfo CHUGGING_BARREL_DISASSEMBLED__30002 = new LogItemInfo("Chugging barrel (disassembled)",30002, new DeterministicDrop());
+    public static LogItemInfo COLOSSAL_WYRM_TELEPORT_SCROLL_30040 = new LogItemInfo("Colossal wyrm teleport scroll",30040, new UnimplementedDrop());
+    public static LogItemInfo CALCIFIED_ACORN_30042 = new LogItemInfo("Calcified acorn",30042, new UnimplementedDrop());
+    public static LogItemInfo BROKEN_ZOMBIE_HELMET_30324 = new LogItemInfo("Broken zombie helmet",30324, new UnimplementedDrop());
+    public static LogItemInfo PENDANT_OF_ATES_INERT__29892 = new LogItemInfo("Pendant of ates (inert)",29892, new MissingKillCountDrop());
+
 
     private final String itemName;
     private final int itemId;
