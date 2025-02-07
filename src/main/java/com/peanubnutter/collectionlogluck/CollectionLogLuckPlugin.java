@@ -229,7 +229,6 @@ public class CollectionLogLuckPlugin extends Plugin {
             // fetching may be async, but we need to be back on client thread to add chat message.
             clientThread.invoke(() -> {
                 String message = buildLuckCommandMessage(collectionLog, checkLuckMatcher.group(2), false);
-
                 client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", message, null);
             });
         });
@@ -528,6 +527,9 @@ public class CollectionLogLuckPlugin extends Plugin {
         }
 
         return new ChatMessageBuilder()
+                // Jagex added some "CA_ID: #### |" format thing to the beginning of messages which messes up message
+                // parsing. Adding this as a hack to bypass whatever is stripping the message.
+                .append("|")
                 .append(item.getName() + " ")
                 .img(loadedCollectionLogIcons.get(item.getId()))
                 .append("x" + numObtained + ": ")
