@@ -220,6 +220,15 @@ public abstract class AbstractDrop implements DropLuck {
             dropChance *= clampContribution(config.avgNexContribution());
         }
         else if (
+                rollInfo.getDropSource().equals(LogItemSourceInfo.HUEYCOATL_KILLS)
+                        && configOptions.contains(CollectionLogLuckConfig.AVG_HUEYCOATL_CONTRIBUTION_KEY)
+        ) {
+            // It isn't very clear whether MVP chance is 10% more additively or multiplicatively. This assumes multiplicatively
+            // and the user is instructed to increase the contribution by 10% if they always MVP, so no additional
+            // calculation based on team size etc. is necessary.
+            dropChance *= clampContribution(config.avgHueycoatlContribution());
+        }
+        else if (
                 rollInfo.getDropSource().equals(LogItemSourceInfo.ZALCANO_KILLS)
                         && configOptions.contains(CollectionLogLuckConfig.AVG_ZALCANO_CONTRIBUTION_KEY)
         ) {

@@ -2121,11 +2121,11 @@ public class LogItemInfo {
                     .withConfigOption(CollectionLogLuckConfig.NIGHTMARE_KC_PRE_BUFF_KEY)
                     .withConfigOption(CollectionLogLuckConfig.PHOSANIS_NIGHTMARE_KC_PRE_BUFF_KEY)
     );
-    // Note: This drop rate assumes you own all essence pouches or a colossal pouch.
     public static LogItemInfo INTRICATE_POUCH_26908 = new LogItemInfo("Intricate pouch", 26908,
             // Actually, the player can only obtain one of these.
+            // Note: This drop rate assumes you own all essence pouches or a colossal pouch.
 //            new BinomialDrop(new RollInfo(LogItemSourceInfo.RIFTS_SEARCHES, 1.0 / 25)));
-            new MissingKillCountDrop());
+            new CappedCollectionLogTrackingDrop(1));
     public static LogItemInfo IORWERTH_CAMP_TELEPORT_12410 = new LogItemInfo("Iorwerth camp teleport", 12410,
             new PoissonBinomialStackDrop());
     public static LogItemInfo IRON_BOOTS_4121 = new LogItemInfo("Iron boots", 4121,
@@ -4197,12 +4197,24 @@ public class LogItemInfo {
     public static LogItemInfo ICE_ELEMENT_STAFF_CROWN_30628 = new LogItemInfo("Ice element staff crown",30628, new MissingKillCountDrop());
     public static LogItemInfo FIRE_ELEMENT_STAFF_CROWN_30631 = new LogItemInfo("Fire element staff crown",30631, new MissingKillCountDrop());
     public static LogItemInfo DESICCATED_PAGE_30640 = new LogItemInfo("Desiccated page",30640, new MissingKillCountDrop());
-    public static LogItemInfo HUBERTE_30152 = new LogItemInfo("Huberte",30152, new UnimplementedDrop());
-    public static LogItemInfo DRAGON_HUNTER_WAND_30070 = new LogItemInfo("Dragon hunter wand",30070, new UnimplementedDrop());
-    public static LogItemInfo TOME_OF_EARTH_EMPTY_30066 = new LogItemInfo("Tome of earth (empty)",30066, new UnimplementedDrop());
+    public static LogItemInfo HUBERTE_30152 = new LogItemInfo("Huberte",30152,
+            new BinomialDrop(new RollInfo(LogItemSourceInfo.HUEYCOATL_KILLS, 1.0 / 400))
+                    .withConfigOption(CollectionLogLuckConfig.AVG_HUEYCOATL_CONTRIBUTION_KEY));
+    public static LogItemInfo DRAGON_HUNTER_WAND_30070 = new LogItemInfo("Dragon hunter wand",30070,
+            new BinomialDrop(new RollInfo(LogItemSourceInfo.HUEYCOATL_KILLS, 1.0 / 207))
+                    .withConfigOption(CollectionLogLuckConfig.AVG_HUEYCOATL_CONTRIBUTION_KEY));
+    public static LogItemInfo TOME_OF_EARTH_EMPTY_30066 = new LogItemInfo("Tome of earth (empty)",30066,
+            new BinomialDrop(new RollInfo(LogItemSourceInfo.HUEYCOATL_KILLS, 1.0 / 92))
+                    .withConfigOption(CollectionLogLuckConfig.AVG_HUEYCOATL_CONTRIBUTION_KEY));
+    // Unimplemented because the number received might depend on contribution, but not sure how, and there is no
+    // mechanism to calculate drops of this type yet.
     public static LogItemInfo SOILED_PAGE_30068 = new LogItemInfo("Soiled page",30068, new UnimplementedDrop());
-    public static LogItemInfo HUEYCOATL_HIDE_30085 = new LogItemInfo("Hueycoatl hide",30085, new UnimplementedDrop());
-    public static LogItemInfo HUASCA_SEED_30088 = new LogItemInfo("Huasca seed",30088, new UnimplementedDrop());
+    public static LogItemInfo HUEYCOATL_HIDE_30085 = new LogItemInfo("Hueycoatl hide",30085,
+            new BinomialUniformSumDrop(
+                    new RollInfo(LogItemSourceInfo.HUEYCOATL_KILLS, 1.0 / 34.5),
+                    2, 3)
+                    .withConfigOption(CollectionLogLuckConfig.AVG_HUEYCOATL_CONTRIBUTION_KEY));
+    public static LogItemInfo HUASCA_SEED_30088 = new LogItemInfo("Huasca seed",30088, new MissingKillCountDrop());
     public static LogItemInfo PRESCRIPTION_GOGGLES_29974 = new LogItemInfo("Prescription goggles",29974, new DeterministicDrop());
     public static LogItemInfo ALCHEMIST_LABCOAT_29978 = new LogItemInfo("Alchemist labcoat",29978, new DeterministicDrop());
     public static LogItemInfo ALCHEMIST_PANTS_29982 = new LogItemInfo("Alchemist pants",29982, new DeterministicDrop());

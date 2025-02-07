@@ -25,6 +25,7 @@ public interface CollectionLogLuckConfig extends Config
 	String AVG_NIGHTMARE_TEAM_SIZE_KEY = "avg_nightmare_team_size";
 	String AVG_NIGHTMARE_CONTRIBUTION_KEY = "avg_nightmare_contribution";
 	String AVG_NEX_CONTRIBUTION_KEY = "avg_nex_contribution";
+	String AVG_HUEYCOATL_CONTRIBUTION_KEY = "avg_hueycoatl_contribution";
 	String AVG_ZALCANO_CONTRIBUTION_KEY = "avg_zalcano_contribution";
 	String AVG_ZALCANO_POINTS_KEY = "avg_zalcano_points";
 	String NUM_FIRE_CAPES_SACRIFICED_KEY = "num_fire_capes_sacrificed";
@@ -258,11 +259,24 @@ public interface CollectionLogLuckConfig extends Config
 	}
 
 	@ConfigItem(
+			keyName = AVG_HUEYCOATL_CONTRIBUTION_KEY,
+			name = "Hueycoatl contribution",
+			description = "Avg. fraction (0 to 1) of contribution to killing The Hueycoatl." +
+					" This should include MVP bonuses, so multiply by 1.1 if always MVP, or less accordingly.",
+			position = 23,
+			section = luckSection
+	)
+	default double avgHueycoatlContribution() {
+		// average MVP rate of 33% with an average contribution on a 3-man team
+		return 0.367;
+	}
+
+	@ConfigItem(
 			keyName = AVG_CALLISTO_CONTRIBUTION_KEY,
 			name = "Callisto contribution",
 			description = "Avg. fraction (0 to 1) of contribution to killing Callisto." +
 					" Set to 0.1 if team size >= 10, or 1 if soloing.",
-			position = 23,
+			position = 24,
 			section = luckSection
 	)
 	default double avgCallistoContribution() {
@@ -274,7 +288,7 @@ public interface CollectionLogLuckConfig extends Config
 			name = "Venenatis contribution",
 			description = "Avg. fraction (0 to 1) of contribution to killing Venenatis." +
 					" Set to 0.1 if team size >= 10, or 1 if soloing.",
-			position = 24,
+			position = 25,
 			section = luckSection
 	)
 	default double avgVenenatisContribution() {
@@ -286,7 +300,7 @@ public interface CollectionLogLuckConfig extends Config
 			name = "Vet'ion contribution",
 			description = "Avg. fraction (0 to 1) of contribution to killing Vet'ion." +
 					" Set to 0.1 if team size >= 10, or 1 if soloing.",
-			position = 25,
+			position = 26,
 			section = luckSection
 	)
 	default double avgVetionContribution() {
@@ -297,7 +311,7 @@ public interface CollectionLogLuckConfig extends Config
 			keyName = AVG_SCURRIUS_MVP_RATE_KEY,
 			name = "Scurrius MVP rate",
 			description = "Fraction (0 to 1) of the time you are MVP while fighting Scurrius. Set to 1 if you always solo.",
-			position = 26,
+			position = 27,
 			section = luckSection
 	)
 	default double avgScurriusMvpRate() {
@@ -309,7 +323,7 @@ public interface CollectionLogLuckConfig extends Config
 			keyName = AVG_ZALCANO_CONTRIBUTION_KEY,
 			name = "Zalcano contribution",
 			description = "Avg. fraction (0 to 1) of contribution to killing Zalcano, taking into account team size.",
-			position = 27,
+			position = 28,
 			section = luckSection
 	)
 	default double avgZalcanoContribution() {
@@ -321,7 +335,7 @@ public interface CollectionLogLuckConfig extends Config
 			keyName = AVG_ZALCANO_POINTS_KEY,
 			name = "Zalcano points",
 			description = "Your average number of points per Zalcano kill. See wiki for more info.",
-			position = 28,
+			position = 29,
 			section = luckSection
 	)
 	default int avgZalcanoPoints() {
