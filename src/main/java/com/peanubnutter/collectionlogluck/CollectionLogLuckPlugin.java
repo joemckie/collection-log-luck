@@ -56,6 +56,7 @@ import java.util.Map;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -123,6 +124,9 @@ public class CollectionLogLuckPlugin extends Plugin {
 
     @Inject
     private CollectionLogLuckApiClient apiClient;
+
+    @Inject
+    private ScheduledExecutorService executor;
 
     @Inject
     private JsonUtils jsonUtils;
@@ -256,6 +260,8 @@ public class CollectionLogLuckPlugin extends Plugin {
         String username = client.getLocalPlayer().getName();
 
         fetchCollectionLog(username, true, collectionLog -> {
+            checkForOutOfSyncCollectionLogData(collectionLog);
+
             // fetching may be async, but we need to be back on client thread to add chat message.
             clientThread.invoke(() -> {
                 String message = buildLuckCommandMessage(collectionLog, checkLuckMatcher.group(2), false);
@@ -285,6 +291,8 @@ public class CollectionLogLuckPlugin extends Plugin {
         String username = getChatMessageSenderUsername(chatMessage);
 
         fetchCollectionLog(username, true, collectionLog -> {
+            checkForOutOfSyncCollectionLogData(collectionLog);
+
             // fetching may be async, but we need to be back on client thread to modify chat message.
             clientThread.invoke(() -> {
                 replaceCommandMessage(chatMessage, message, collectionLog);
@@ -295,14 +303,14 @@ public class CollectionLogLuckPlugin extends Plugin {
     @Subscribe
     public void onScriptPostFired(ScriptPostFired scriptPostFired) {
         if (scriptPostFired.getScriptId() == ScriptID.COLLECTION_DRAW_LIST) {
-            clientThread.invokeLater(this::checkItemsOnPageUpToDate);
+            clientThread.invokeLater(this::cacheCollectionLogPageData);
         }
     }
 
     // The general strategy is to cache any item counts we've seen, and then whenever the player tries to get
     // luck for any of those items (whether through chat command or visual overlay), we warn the player if the
     // collectionlog.net data is out of date.
-    protected void checkItemsOnPageUpToDate() {
+    protected void cacheCollectionLogPageData() {
         if (!isValidWorldType()) {
             return;
         }
@@ -332,19 +340,23 @@ public class CollectionLogLuckPlugin extends Plugin {
         }
 
         Widget[] children = pageHead.getDynamicChildren();
-        if (children.length < 3) {
-            // Page does not have kill count widgets, so there is nothing more to cache.
-            return;
-        }
-        Widget[] killCountWidgets = Arrays.copyOfRange(children, 2, children.length);
-        for (Widget killCountWidget : killCountWidgets) {
-            String killCountString = killCountWidget.getText();
-            // The "sequence" parameter value does not matter and will be ignored.
-            CollectionLogKillCount killCount = CollectionLogKillCount.fromString(killCountString, 0);
+        // page has killcount widgets
+        if (children.length >= 3) {
+            Widget[] killCountWidgets = Arrays.copyOfRange(children, 2, children.length);
+            for (Widget killCountWidget : killCountWidgets) {
+                String killCountString = killCountWidget.getText();
+                // The "sequence" parameter value does not matter and will be ignored.
+                CollectionLogKillCount killCount = CollectionLogKillCount.fromString(killCountString, 0);
 
-            // TODO: prepend the key with the player's username if ever supporting adventure log
-            seenKillCounts.put(killCount.getName(), killCount.getAmount());
+                // TODO: prepend the key with the player's username if ever supporting adventure log
+                seenKillCounts.put(killCount.getName(), killCount.getAmount());
+            }
         }
+
+        // Update collection log immediately if out of sync errors were found. Note: Assumes this is the local player
+        // and not the adventure log.
+        // Run in background to avoid delaying collection log rendering.
+        executor.submit(() -> fetchCollectionLog(client.getLocalPlayer().getName(), true, this::checkForOutOfSyncCollectionLogData));
     }
 
     @Subscribe
@@ -418,20 +430,23 @@ public class CollectionLogLuckPlugin extends Plugin {
                 collectionLog = collectionLogFuture.getNow(null);
             }
             callback.accept(collectionLog);
-            checkForOutOfSyncCollectionLogData(collectionLog);
         } catch (IOException | ExecutionException | CancellationException | InterruptedException e) {
             log.error("Unable to retrieve collection log: " + e.getMessage());
             callback.accept(null);
         }
     }
 
+    // Check for out of sync data, correct any issues that were found, and print a warning message.
     protected void checkForOutOfSyncCollectionLogData(CollectionLog collectionLog) {
         // This will be null if collection log has not been loaded yet.
         if (collectionLog == null) return;
 
+        // only correct out of sync issues for the local player
+        if (!isLocalPlayerCollectionLog(collectionLog)) return;
+
         if (desyncReminderSent) return;
 
-        if (hasOutOfSyncCollectionLogData(collectionLog)) {
+        if (fixOutOfSyncCollectionLogData(collectionLog)) {
             String warningText =
                     "Collection Log Luck plugin: WARNING: Your collection log is out of sync with collectionlog.net." +
                     " If you send a !luck chat message, other players may see out of date data." +
@@ -440,13 +455,18 @@ public class CollectionLogLuckPlugin extends Plugin {
                 .append(WARNING_TEXT_COLOR, warningText)
                 .build();
 
-            client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", outOfSyncWarning, null);
+            // fetching may be async, but we need to be back on client thread to add chat message.
+            clientThread.invoke(() -> {
+                client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", outOfSyncWarning, null);
+            });
 
             desyncReminderSent = true;
         }
     }
 
-    protected boolean hasOutOfSyncCollectionLogData(CollectionLog collectionLog) {
+    protected boolean fixOutOfSyncCollectionLogData(CollectionLog collectionLog) {
+        boolean foundDesync = false;
+
         // check obtained item counts
         for (Integer itemId : seenItemCounts.keySet()) {
             LogItemInfo logItemInfo = LogItemInfo.findByItemId(itemId);
@@ -460,7 +480,8 @@ public class CollectionLogLuckPlugin extends Plugin {
             if (incalculableReason != null) continue;
 
             if (seenItemCounts.get(itemId) != item.getQuantity()) {
-                return true;
+                item.setQuantity(seenItemCounts.get(itemId));
+                foundDesync = true;
             }
         }
 
@@ -470,12 +491,12 @@ public class CollectionLogLuckPlugin extends Plugin {
             if (collectionLogKc == null) continue;
 
             if (seenKillCounts.get(dropSource) != collectionLogKc.getAmount()) {
-                return true;
+                collectionLogKc.setAmount(seenKillCounts.get(dropSource));
+                foundDesync = true;
             }
         }
 
-        // nothing out of sync has been found
-        return false;
+        return foundDesync;
     }
 
     // Calculate luck for this item, caching results
@@ -484,7 +505,19 @@ public class CollectionLogLuckPlugin extends Plugin {
                                                                CollectionLog collectionLog,
                                                                CollectionLogLuckConfig calculationConfig) {
         String username = Text.sanitize(collectionLog.getUsername());
-        String calculationId = username + "|" + item.getId();
+
+        // If the client first calculates luck for an item, its result will be cached. Then, if the client
+        // opens the corresponding page and discovers that the page is out of date with collectionlog.net, that item
+        // will not be recalculated even though it should.
+        // To solve this, we could clear calculation results for any item that is found to be out of date,
+        // but the problem is that the client will then recalculate every single frame when displaying luck for an
+        // out of date page.
+        // Instead, we can simply add the kc and item quantity to the calculation ID. Then, we don't need to
+        // clear calculation results at all, since upon discovering an item is out of date, the key will change and the
+        // luck will be recalculated.
+        // The killcount description could be long, but it is necessary
+        String calculationId = username + "|" + item.getId() + "|" + item.getQuantity() + "|"
+                + dropLuck.getKillCountDescription(collectionLog);
 
         // Only calculate if necessary
         if (!luckCalculationResults.containsKey(calculationId)) {
@@ -572,6 +605,10 @@ public class CollectionLogLuckPlugin extends Plugin {
             .build();
     }
 
+    private boolean isLocalPlayerCollectionLog(CollectionLog collectionLog) {
+         return client.getLocalPlayer().getName().equalsIgnoreCase(collectionLog.getUsername());
+    }
+
     /**
      * Builds the replacement messages for the !luck... command
      *
@@ -582,8 +619,7 @@ public class CollectionLogLuckPlugin extends Plugin {
      * @return Replacement message
      */
     private String buildLuckCommandMessage(CollectionLog collectionLog, String commandTarget, boolean useFuzzyMatch) {
-        boolean collectionLogIsLocalPlayer =
-                client.getLocalPlayer().getName().equalsIgnoreCase(collectionLog.getUsername());
+        boolean collectionLogIsLocalPlayer = isLocalPlayerCollectionLog(collectionLog);
 
         if (collectionLogIsLocalPlayer && config.hidePersonalLuckCalculation()) {
             // This should make it obvious that 1) The player can go to the config to change this setting, and 2) other
