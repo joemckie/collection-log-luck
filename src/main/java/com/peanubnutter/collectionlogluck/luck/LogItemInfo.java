@@ -371,13 +371,20 @@ public class LogItemInfo {
     public static LogItemInfo ANCIENT_WRITINGS_21670 = new LogItemInfo("Ancient writings", 21670,
             new MissingKillCountDrop());
     public static LogItemInfo ANGLER_BOOTS_13261 = new LogItemInfo("Angler boots", 13261,
-            new DeterministicDrop());
+            new MissingKillCountDrop());
+    // Unfortunately, killcount is missing. Otherwise this might be correct.
+//            new DupeProtectedSetBinomialDrop(
+//                    // Assuming the player got the piece after the drop rate changes. I'm not going to make a config
+//                    // option to configure pre-drop-rate-change KC at this time.
+//                    new RollInfo(LogItemSourceInfo.REWARDS_CLAIMED, 1.0 / 12.0),
+//                    ImmutableList.of(13261, 13258, 13259, 13260)
+//            ));
     public static LogItemInfo ANGLER_HAT_13258 = new LogItemInfo("Angler hat", 13258,
-            new DeterministicDrop());
+            new MissingKillCountDrop());
     public static LogItemInfo ANGLER_TOP_13259 = new LogItemInfo("Angler top", 13259,
-            new DeterministicDrop());
+            new MissingKillCountDrop());
     public static LogItemInfo ANGLER_WADERS_13260 = new LogItemInfo("Angler waders", 13260,
-            new DeterministicDrop());
+            new MissingKillCountDrop());
     public static LogItemInfo ANGUISH_ORNAMENT_KIT_22246 = new LogItemInfo("Anguish ornament kit", 22246,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.MASTER_CLUES_COMPLETED, 1.0 / 851, 6)));
     public static LogItemInfo ANKOUS_LEGGINGS_20104 = new LogItemInfo("Ankou's leggings", 20104,
@@ -1516,7 +1523,8 @@ public class LogItemInfo {
             // are counted in the collection log.
             new BinomialDrop(new RollInfo(LogItemSourceInfo.PHANTOM_MUSPAH_KILLS, 1.0 / 24.8)));
     public static LogItemInfo FROZEN_TABLET_28333 = new LogItemInfo("Frozen tablet", 28333,
-            new DeterministicDrop());
+            // Unimplemented because the drop becomes more common over time at an UNKNOWN rate
+            new UnimplementedDrop());
     public static LogItemInfo FROZEN_WHIP_MIX_12769 = new LogItemInfo("Frozen whip mix", 12769,
             new DeterministicDrop());
     public static LogItemInfo FUNKY_SHAPED_LOG_28138 = new LogItemInfo("Funky shaped log", 28138,
@@ -3145,7 +3153,8 @@ public class LogItemInfo {
     public static LogItemInfo SARADOMIN_SWORD_11838 = new LogItemInfo("Saradomin sword", 11838,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.COMMANDER_ZILYANA_KILLS, 1.0 / 127 + 3.0 / 5376)));
     public static LogItemInfo SCARRED_TABLET_28332 = new LogItemInfo("Scarred tablet", 28332,
-            new DeterministicDrop());
+            // Unimplemented because the drop becomes more common over time at an UNKNOWN rate
+            new UnimplementedDrop());
     public static LogItemInfo SCORPIAS_OFFSPRING_13181 = new LogItemInfo("Scorpia's offspring", 13181,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.SCORPIA_KILLS, 1.0 / 2016)));
     public static LogItemInfo SCRIBBLED_NOTE_21664 = new LogItemInfo("Scribbled note", 21664,
@@ -3255,7 +3264,8 @@ public class LogItemInfo {
     public static LogItemInfo SINHAZA_SHROUD_TIER_5_22502 = new LogItemInfo("Sinhaza shroud tier 5", 22502,
             new DeterministicDrop());
     public static LogItemInfo SIRENIC_TABLET_28331 = new LogItemInfo("Sirenic tablet", 28331,
-            new DeterministicDrop());
+            // Unimplemented because the drop becomes more common over time at an UNKNOWN rate
+            new UnimplementedDrop());
     public static LogItemInfo SIRENS_STAFF_28323 = new LogItemInfo("Siren's staff", 28323,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.WHISPERER_KILLS, 1.0 / 512)));
     public static LogItemInfo SKELETAL_VISAGE_22006 = new LogItemInfo("Skeletal visage", 22006,
@@ -3363,7 +3373,8 @@ public class LogItemInfo {
     public static LogItemInfo STRANGE_OLD_LOCKPICK_FULL_24740 = new LogItemInfo("Strange old lockpick (full)", 24740,
             new MissingKillCountDrop());
     public static LogItemInfo STRANGLED_TABLET_28330 = new LogItemInfo("Strangled tablet", 28330,
-            new DeterministicDrop());
+            // Unimplemented because the drop becomes more common over time at an UNKNOWN rate
+            new UnimplementedDrop());
     public static LogItemInfo STRENGTH_AMULET_T_10364 = new LogItemInfo("Strength amulet (t)", 10364,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.MEDIUM_CLUES_COMPLETED, 1.0 / 341, 4)));
     public static LogItemInfo STUDDED_BODY_G_7362 = new LogItemInfo("Studded body (g)", 7362,
@@ -4150,42 +4161,42 @@ public class LogItemInfo {
             new BinomialDrop(new RollInfo(LogItemSourceInfo.TORMENTED_DEMON_KILLS, 1.0 / 500.0 * 499.0 / 500.0)));
     public static LogItemInfo GUTHIXIAN_TEMPLE_TELEPORT_29684 = new LogItemInfo("Guthixian temple teleport", 29684,
             new FixedStackDrop(new RollInfo(LogItemSourceInfo.TORMENTED_DEMON_KILLS, 1.0 / 12), 2));
-    public static LogItemInfo NID_29836 = new LogItemInfo("Nid",29836,
+    public static LogItemInfo NID_29836 = new LogItemInfo("Nid", 29836,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.ARAXXOR_KILLS, 1.0 / 3000))
                     .withConfigOption("Nid"));
-    public static LogItemInfo ARAXYTE_VENOM_SACK_29784 = new LogItemInfo("Araxyte venom sack",29784,
+    public static LogItemInfo ARAXYTE_VENOM_SACK_29784 = new LogItemInfo("Araxyte venom sack", 29784,
             new MissingKillCountDrop());
-    public static LogItemInfo SPIDER_CAVE_TELEPORT_29782 = new LogItemInfo("Spider cave teleport",29782,
+    public static LogItemInfo SPIDER_CAVE_TELEPORT_29782 = new LogItemInfo("Spider cave teleport", 29782,
             new FixedStackDrop(new RollInfo(LogItemSourceInfo.ARAXXOR_KILLS, 1.0 / 14.38), 3)
                     .withConfigOption(CollectionLogLuckConfig.NUM_ARAXXOR_DESTROYED_KEY));
-    public static LogItemInfo ARAXYTE_FANG_29799 = new LogItemInfo("Araxyte fang",29799,
+    public static LogItemInfo ARAXYTE_FANG_29799 = new LogItemInfo("Araxyte fang", 29799,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.ARAXXOR_KILLS, 1.0 / 600))
                     .withConfigOption(CollectionLogLuckConfig.NUM_ARAXXOR_DESTROYED_KEY));
-    public static LogItemInfo NOXIOUS_POINT_29790 = new LogItemInfo("Noxious point",29790,
+    public static LogItemInfo NOXIOUS_POINT_29790 = new LogItemInfo("Noxious point", 29790,
             new DupeProtectedSetBinomialDrop(
                     new RollInfo(LogItemSourceInfo.ARAXXOR_KILLS, 1.0 / 600),
                     ImmutableList.of(29790, 29792, 29794)
             ).withConfigOption(CollectionLogLuckConfig.NUM_ARAXXOR_DESTROYED_KEY));
-    public static LogItemInfo NOXIOUS_BLADE_29792 = new LogItemInfo("Noxious blade",29792,
+    public static LogItemInfo NOXIOUS_BLADE_29792 = new LogItemInfo("Noxious blade", 29792,
             new DupeProtectedSetBinomialDrop(
                     new RollInfo(LogItemSourceInfo.ARAXXOR_KILLS, 1.0 / 600),
                     ImmutableList.of(29790, 29792, 29794)
             ).withConfigOption(CollectionLogLuckConfig.NUM_ARAXXOR_DESTROYED_KEY));
-    public static LogItemInfo NOXIOUS_POMMEL_29794 = new LogItemInfo("Noxious pommel",29794,
+    public static LogItemInfo NOXIOUS_POMMEL_29794 = new LogItemInfo("Noxious pommel", 29794,
             new DupeProtectedSetBinomialDrop(
                     new RollInfo(LogItemSourceInfo.ARAXXOR_KILLS, 1.0 / 600),
                     ImmutableList.of(29790, 29792, 29794)
             ).withConfigOption(CollectionLogLuckConfig.NUM_ARAXXOR_DESTROYED_KEY));
-    public static LogItemInfo ARAXYTE_HEAD_29788 = new LogItemInfo("Araxyte head",29788,
+    public static LogItemInfo ARAXYTE_HEAD_29788 = new LogItemInfo("Araxyte head", 29788,
             new MissingKillCountDrop());
-    public static LogItemInfo JAR_OF_VENOM_29786 = new LogItemInfo("Jar of venom",29786,
+    public static LogItemInfo JAR_OF_VENOM_29786 = new LogItemInfo("Jar of venom", 29786,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.ARAXXOR_KILLS, 1.0 / 1500))
                     .withConfigOption(CollectionLogLuckConfig.NUM_ARAXXOR_DESTROYED_KEY));
-    public static LogItemInfo COAGULATED_VENOM_29781 = new LogItemInfo("Coagulated venom",29781,
+    public static LogItemInfo COAGULATED_VENOM_29781 = new LogItemInfo("Coagulated venom", 29781,
             new DeterministicDrop());
-    public static LogItemInfo ARANEA_BOOTS_29806 = new LogItemInfo("Aranea boots",29806,
+    public static LogItemInfo ARANEA_BOOTS_29806 = new LogItemInfo("Aranea boots", 29806,
             new MissingKillCountDrop());
-    public static LogItemInfo MOXI_30154 = new LogItemInfo("Moxi",30154,
+    public static LogItemInfo MOXI_30154 = new LogItemInfo("Moxi", 30154,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.AMOXLIATL_KILLS, 1.0 / 3000)));
     public static LogItemInfo GLACIAL_TEMOTLI_29889 = new LogItemInfo("Glacial temotli",29889, new MissingKillCountDrop());
     public static LogItemInfo PENDANT_OF_ATES_INERT_29892 = new LogItemInfo("Pendant of ates (inert)",29892, new MissingKillCountDrop());
@@ -4200,32 +4211,32 @@ public class LogItemInfo {
     public static LogItemInfo HUBERTE_30152 = new LogItemInfo("Huberte",30152,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.HUEYCOATL_KILLS, 1.0 / 400))
                     .withConfigOption(CollectionLogLuckConfig.AVG_HUEYCOATL_CONTRIBUTION_KEY));
-    public static LogItemInfo DRAGON_HUNTER_WAND_30070 = new LogItemInfo("Dragon hunter wand",30070,
+    public static LogItemInfo DRAGON_HUNTER_WAND_30070 = new LogItemInfo("Dragon hunter wand", 30070,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.HUEYCOATL_KILLS, 1.0 / 207))
                     .withConfigOption(CollectionLogLuckConfig.AVG_HUEYCOATL_CONTRIBUTION_KEY));
-    public static LogItemInfo TOME_OF_EARTH_EMPTY_30066 = new LogItemInfo("Tome of earth (empty)",30066,
+    public static LogItemInfo TOME_OF_EARTH_EMPTY_30066 = new LogItemInfo("Tome of earth (empty)", 30066,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.HUEYCOATL_KILLS, 1.0 / 92))
                     .withConfigOption(CollectionLogLuckConfig.AVG_HUEYCOATL_CONTRIBUTION_KEY));
     // Unimplemented because the number received might depend on contribution, but not sure how, and there is no
     // mechanism to calculate drops of this type yet.
-    public static LogItemInfo SOILED_PAGE_30068 = new LogItemInfo("Soiled page",30068, new UnimplementedDrop());
-    public static LogItemInfo HUEYCOATL_HIDE_30085 = new LogItemInfo("Hueycoatl hide",30085,
+    public static LogItemInfo SOILED_PAGE_30068 = new LogItemInfo("Soiled page", 30068, new UnimplementedDrop());
+    public static LogItemInfo HUEYCOATL_HIDE_30085 = new LogItemInfo("Hueycoatl hide", 30085,
             new BinomialUniformSumDrop(
                     new RollInfo(LogItemSourceInfo.HUEYCOATL_KILLS, 1.0 / 34.5),
                     2, 3)
                     .withConfigOption(CollectionLogLuckConfig.AVG_HUEYCOATL_CONTRIBUTION_KEY));
-    public static LogItemInfo HUASCA_SEED_30088 = new LogItemInfo("Huasca seed",30088, new MissingKillCountDrop());
-    public static LogItemInfo PRESCRIPTION_GOGGLES_29974 = new LogItemInfo("Prescription goggles",29974, new DeterministicDrop());
-    public static LogItemInfo ALCHEMIST_LABCOAT_29978 = new LogItemInfo("Alchemist labcoat",29978, new DeterministicDrop());
-    public static LogItemInfo ALCHEMIST_PANTS_29982 = new LogItemInfo("Alchemist pants",29982, new DeterministicDrop());
-    public static LogItemInfo ALCHEMIST_GLOVES_29986 = new LogItemInfo("Alchemist gloves",29986, new DeterministicDrop());
-    public static LogItemInfo ALCHEMISTS_AMULET_29990 = new LogItemInfo("Alchemist's amulet",29990, new DeterministicDrop());
-    public static LogItemInfo REAGENT_POUCH_29996 = new LogItemInfo("Reagent pouch",29996, new DeterministicDrop());
-    public static LogItemInfo CHUGGING_BARREL_DISASSEMBLED__30002 = new LogItemInfo("Chugging barrel (disassembled)",30002, new DeterministicDrop());
-    public static LogItemInfo COLOSSAL_WYRM_TELEPORT_SCROLL_30040 = new LogItemInfo("Colossal wyrm teleport scroll",30040, new DeterministicDrop());
-    public static LogItemInfo CALCIFIED_ACORN_30042 = new LogItemInfo("Calcified acorn",30042, new DeterministicDrop());
-    public static LogItemInfo BROKEN_ZOMBIE_HELMET_30324 = new LogItemInfo("Broken zombie helmet",30324, new MissingKillCountDrop());
-    public static LogItemInfo PENDANT_OF_ATES_INERT__29892 = new LogItemInfo("Pendant of ates (inert)",29892, new MissingKillCountDrop());
+    public static LogItemInfo HUASCA_SEED_30088 = new LogItemInfo("Huasca seed", 30088, new MissingKillCountDrop());
+    public static LogItemInfo PRESCRIPTION_GOGGLES_29974 = new LogItemInfo("Prescription goggles", 29974, new DeterministicDrop());
+    public static LogItemInfo ALCHEMIST_LABCOAT_29978 = new LogItemInfo("Alchemist labcoat", 29978, new DeterministicDrop());
+    public static LogItemInfo ALCHEMIST_PANTS_29982 = new LogItemInfo("Alchemist pants", 29982, new DeterministicDrop());
+    public static LogItemInfo ALCHEMIST_GLOVES_29986 = new LogItemInfo("Alchemist gloves", 29986, new DeterministicDrop());
+    public static LogItemInfo ALCHEMISTS_AMULET_29990 = new LogItemInfo("Alchemist's amulet", 29990, new DeterministicDrop());
+    public static LogItemInfo REAGENT_POUCH_29996 = new LogItemInfo("Reagent pouch", 29996, new DeterministicDrop());
+    public static LogItemInfo CHUGGING_BARREL_DISASSEMBLED__30002 = new LogItemInfo("Chugging barrel (disassembled)", 30002, new DeterministicDrop());
+    public static LogItemInfo COLOSSAL_WYRM_TELEPORT_SCROLL_30040 = new LogItemInfo("Colossal wyrm teleport scroll", 30040, new DeterministicDrop());
+    public static LogItemInfo CALCIFIED_ACORN_30042 = new LogItemInfo("Calcified acorn", 30042, new DeterministicDrop());
+    public static LogItemInfo BROKEN_ZOMBIE_HELMET_30324 = new LogItemInfo("Broken zombie helmet", 30324, new MissingKillCountDrop());
+    public static LogItemInfo PENDANT_OF_ATES_INERT__29892 = new LogItemInfo("Pendant of ates (inert)", 29892, new MissingKillCountDrop());
 
 
     private final String itemName;
