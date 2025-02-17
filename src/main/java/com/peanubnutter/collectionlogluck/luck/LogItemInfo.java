@@ -67,7 +67,8 @@ public class LogItemInfo {
             // received one.
             new DeterministicDrop());
     public static LogItemInfo ABYSSAL_NEEDLE_26813 = new LogItemInfo("Abyssal needle", 26813,
-            new BinomialDrop(new RollInfo(LogItemSourceInfo.RIFTS_SEARCHES, 1.0 / 300)));
+            new FiniteBinomialDrop(new RollInfo(LogItemSourceInfo.RIFTS_SEARCHES, 1.0 / 300),
+                    1));
     // Note: This represents the effective chance of dropping from the boss, NOT the chance given your # of Unsired.
     public static LogItemInfo ABYSSAL_ORPHAN_13262 = new LogItemInfo("Abyssal orphan", 13262,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.ABYSSAL_SIRE_KILLS, 1.0 / 2560)));
@@ -1496,7 +1497,8 @@ public class LogItemInfo {
     public static LogItemInfo FIRE_CAPE_6570 = new LogItemInfo("Fire cape", 6570,
             new DeterministicDrop());
     public static LogItemInfo FISH_BARREL_25582 = new LogItemInfo("Fish barrel", 25582,
-            new BinomialDrop(new RollInfo(LogItemSourceInfo.REWARD_PERMITS_CLAIMED, 1.0 / 400)));
+            new FiniteBinomialDrop(new RollInfo(LogItemSourceInfo.REWARD_PERMITS_CLAIMED, 1.0 / 400),
+                    1));
     public static LogItemInfo FISH_SACK_22838 = new LogItemInfo("Fish sack", 22838,
             new DeterministicDrop());
     public static LogItemInfo FLAMTAER_BAG_25630 = new LogItemInfo("Flamtaer bag", 25630,
@@ -2136,10 +2138,10 @@ public class LogItemInfo {
                     .withConfigOption(CollectionLogLuckConfig.PHOSANIS_NIGHTMARE_KC_PRE_BUFF_KEY)
     );
     public static LogItemInfo INTRICATE_POUCH_26908 = new LogItemInfo("Intricate pouch", 26908,
-            // Actually, the player can only obtain one of these.
+            // Actually, the player can only obtain one of these (or at least only 1 is tracked!)
             // Note: This drop rate assumes you own all essence pouches or a colossal pouch.
-//            new BinomialDrop(new RollInfo(LogItemSourceInfo.RIFTS_SEARCHES, 1.0 / 25)));
-            new CappedCollectionLogTrackingDrop(1));
+            new FiniteBinomialDrop(new RollInfo(LogItemSourceInfo.RIFTS_SEARCHES, 1.0 / 25),
+                    1));
     public static LogItemInfo IORWERTH_CAMP_TELEPORT_12410 = new LogItemInfo("Iorwerth camp teleport", 12410,
             new PoissonBinomialStackDrop());
     public static LogItemInfo IRON_BOOTS_4121 = new LogItemInfo("Iron boots", 4121,
@@ -2378,7 +2380,8 @@ public class LogItemInfo {
             new MissingKillCountDrop());
     public static LogItemInfo LOST_BAG_26912 = new LogItemInfo("Lost bag", 26912,
             // Assumes the player opens their intricate pouches
-            new BinomialDrop(new RollInfo(LogItemSourceInfo.RIFTS_SEARCHES, 1.0 / 25.0 / 60)));
+            new FiniteBinomialDrop(new RollInfo(LogItemSourceInfo.RIFTS_SEARCHES, 1.0 / 25.0 / 60),
+                    1));
     public static LogItemInfo LOVAKENGJ_BANNER_20257 = new LogItemInfo("Lovakengj banner", 20257,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.MEDIUM_CLUES_COMPLETED, 1.0 / 1133, 4)));
     public static LogItemInfo LOVAKENGJ_HOOD_20119 = new LogItemInfo("Lovakengj hood", 20119,
@@ -3398,7 +3401,9 @@ public class LogItemInfo {
     public static LogItemInfo SWIFT_BLADE_24219 = new LogItemInfo("Swift blade", 24219,
             new DeterministicDrop());
     public static LogItemInfo TACKLE_BOX_25580 = new LogItemInfo("Tackle box", 25580,
-            new BinomialDrop(new RollInfo(LogItemSourceInfo.REWARD_PERMITS_CLAIMED, 1.0 / 400)));
+            new FiniteBinomialDrop(
+                    new RollInfo(LogItemSourceInfo.REWARD_PERMITS_CLAIMED, 1.0 / 400),
+                    1));
     public static LogItemInfo TAI_BWO_WANNAI_TELEPORT_12409 = new LogItemInfo("Tai bwo wannai teleport", 12409,
             new PoissonBinomialStackDrop());
     public static LogItemInfo TANGLEROOT_20661 = new LogItemInfo("Tangleroot", 20661,
@@ -3411,7 +3416,8 @@ public class LogItemInfo {
             new BinomialDrop(new RollInfo(LogItemSourceInfo.HARD_CLUES_COMPLETED, 1.0 / 1625, 5)));
     public static LogItemInfo TARNISHED_LOCKET_26910 = new LogItemInfo("Tarnished locket", 26910,
             // Assumes the player opens their intricate pouches
-            new BinomialDrop(new RollInfo(LogItemSourceInfo.RIFTS_SEARCHES, 1.0 / 25.0 / 40)));
+            new FiniteBinomialDrop(new RollInfo(LogItemSourceInfo.RIFTS_SEARCHES, 1.0 / 25.0 / 40),
+                    1));
     public static LogItemInfo TEACHER_WAND_6912 = new LogItemInfo("Teacher wand", 6912,
             new DeterministicDrop());
     public static LogItemInfo TEAM_CAPE_I_20217 = new LogItemInfo("Team cape i", 20217,
