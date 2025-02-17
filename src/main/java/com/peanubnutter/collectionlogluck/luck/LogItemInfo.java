@@ -3294,7 +3294,10 @@ public class LogItemInfo {
     public static LogItemInfo SLEEPING_CAP_10398 = new LogItemInfo("Sleeping cap", 10398,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.EASY_CLUES_COMPLETED, 1.0 / 1404, 3)));
     public static LogItemInfo SLEPEY_TABLET_25837 = new LogItemInfo("Slepey tablet", 25837,
-            new UnimplementedDrop());
+            new SinglePityBinomialDrop(
+                    new RollInfo(LogItemSourceInfo.PHOSANIS_NIGHTMARE_KILLS, 1.0 / 100),
+                    100
+            ));
     public static LogItemInfo SMITHING_CATALYST_27017 = new LogItemInfo("Smithing catalyst", 27017,
             new DeterministicDrop());
     public static LogItemInfo SMITHS_BOOTS_27027 = new LogItemInfo("Smiths boots", 27027,
