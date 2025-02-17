@@ -36,7 +36,6 @@ public interface CollectionLogLuckConfig extends Config
 	String AVG_VENENATIS_CONTRIBUTION_KEY = "avg_venenatis_contribution";
 	String AVG_VETION_CONTRIBUTION_KEY = "avg_vetion_contribution";
 	String AVG_SCURRIUS_MVP_RATE_KEY = "avg_scurrius_mvp_rate";
-	String NUM_ABYSSAL_LANTERNS_PURCHASED_KEY = "num_abyssal_lanterns_purchased";
 	String NUM_CRYSTAL_WEAPON_SEEDS_PURCHASED_KEY = "num_crystal_weapon_seeds_purchased";
 	String SKOTIZO_KC_PRE_BUFF_KEY = "skotizo_kc_pre_buff";
 	String KQ_KC_PRE_D_PICK_BUFF_KEY = "kq_kc_pre_d_pick_buff";
@@ -416,20 +415,6 @@ public interface CollectionLogLuckConfig extends Config
 			section = luckSection
 	)
 	default int numAraxxorDestroyed() {
-		return 0;
-	}
-
-	// Purchasing Abyssal Lanterns prevents calculating how many the player has received through the Rewards Guardian.
-	// The calculation can be corrected if the player inputs the number purchased from the shop.
-	@ConfigItem(
-			keyName = NUM_ABYSSAL_LANTERNS_PURCHASED_KEY,
-			name = "# Abyssal Lanterns bought",
-			description = "The number of Abyssal Lanterns you bought from the Guardians of the Rift shop.",
-			position = 45,
-			section = luckSection
-	)
-	default int numAbyssalLanternsPurchased()
-	{
 		return 0;
 	}
 

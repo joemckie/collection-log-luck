@@ -19,8 +19,8 @@ public class DropConfigOptionsTest {
 
     @Test
     public void getIncalculableReason_withoutConfigDisplaysError() {
-        AbstractDrop drop = new BinomialDrop(new RollInfo(LogItemSourceInfo.RIFTS_SEARCHES, 1.0 / 700))
-        .withConfigOption(CollectionLogLuckConfig.NUM_ABYSSAL_LANTERNS_PURCHASED_KEY);
+        AbstractDrop drop = new BinomialDrop(new RollInfo(LogItemSourceInfo.BARROWS_CHESTS_OPENED, 1.0 / 12))
+        .withConfigOption(CollectionLogLuckConfig.NUM_INVALID_BARROWS_KC_KEY);
 
         CollectionLogItem item = new CollectionLogItem(1234, "an item", 1, true, 3);
 
@@ -30,76 +30,14 @@ public class DropConfigOptionsTest {
 
     @Test
     public void getIncalculableReason_withConfig() {
-        AbstractDrop drop = new BinomialDrop(new RollInfo(LogItemSourceInfo.RIFTS_SEARCHES, 1.0 / 700))
-        .withConfigOption(CollectionLogLuckConfig.NUM_ABYSSAL_LANTERNS_PURCHASED_KEY);
+        AbstractDrop drop = new BinomialDrop(new RollInfo(LogItemSourceInfo.BARROWS_CHESTS_OPENED, 1.0 / 12))
+        .withConfigOption(CollectionLogLuckConfig.NUM_INVALID_BARROWS_KC_KEY);
 
         CollectionLogItem item = new CollectionLogItem(1234, "an item", 1, true, 3);
 
         CollectionLogLuckConfig config = new CollectionLogLuckConfig() {};
 
         assertNull(drop.getIncalculableReason(item, config));
-    }
-
-    @Test
-    public void calculateLuck_abyssalLantern_withoutModification() {
-        double dropChance = 0.01;
-        int kc = 100;
-        int numObtained = 1;
-        double expectedLuck = 0.36603;
-        double expectedDryness = 0.26424;
-        // expected probabilities calculated online, with the following sig digits
-        double tolerance = 0.00001;
-
-        // default 0 lanterns purchased
-        CollectionLogLuckConfig config = new CollectionLogLuckConfig() {};
-
-        AbstractDrop abyssalLanternDrop = new BinomialDrop(new RollInfo(LogItemSourceInfo.RIFTS_SEARCHES, dropChance))
-        .withConfigOption(CollectionLogLuckConfig.NUM_ABYSSAL_LANTERNS_PURCHASED_KEY);
-
-        CollectionLogItem mockItem = new CollectionLogItem(1234, "some item name", numObtained, true, 0);
-
-        CollectionLog mockCollectionLog = CollectionLogLuckTestUtils.getMockCollectionLogWithKc(
-                LogItemSourceInfo.RIFTS_SEARCHES.getName(), kc);
-
-        double actualLuck = abyssalLanternDrop.calculateLuck(mockItem, mockCollectionLog, config);
-        assertEquals(expectedLuck, actualLuck, tolerance);
-
-        double actualDryness = abyssalLanternDrop.calculateDryness(mockItem, mockCollectionLog, config);
-        assertEquals(expectedDryness, actualDryness, tolerance);
-    }
-
-    @Test
-    public void calculateLuck_abyssalLantern_withModification() {
-        double dropChance = 0.01;
-        int kc = 100;
-        // Even though 3 were obtained, 2 were purchased, so the luck is as if only 1 was received
-        int numObtained = 3;
-        double expectedLuck = 0.36603;
-        double expectedDryness = 0.26424;
-        // expected probabilities calculated online, with the following sig digits
-        double tolerance = 0.00001;
-
-        // The player has configured the number of lanterns purchased to 2
-        CollectionLogLuckConfig config = new CollectionLogLuckConfig() {
-            @Override
-            public int numAbyssalLanternsPurchased() {
-                return 2;
-            }
-        };
-
-        AbstractDrop abyssalLanternDrop = new BinomialDrop(new RollInfo(LogItemSourceInfo.RIFTS_SEARCHES, dropChance))
-        .withConfigOption(CollectionLogLuckConfig.NUM_ABYSSAL_LANTERNS_PURCHASED_KEY);
-
-        CollectionLogItem mockItem = new CollectionLogItem(1234, "some item name", numObtained, true, 0);
-
-        CollectionLog mockCollectionLog = CollectionLogLuckTestUtils.getMockCollectionLogWithKc(
-                LogItemSourceInfo.RIFTS_SEARCHES.getName(), kc);
-
-        double actualLuck = abyssalLanternDrop.calculateLuck(mockItem, mockCollectionLog, config);
-        assertEquals(expectedLuck, actualLuck, tolerance);
-
-        double actualDryness = abyssalLanternDrop.calculateDryness(mockItem, mockCollectionLog, config);
-        assertEquals(expectedDryness, actualDryness, tolerance);
     }
 
     @Test

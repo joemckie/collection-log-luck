@@ -58,8 +58,14 @@ public class LogItemInfo {
     public static LogItemInfo ABYSSAL_HEAD_7979 = new LogItemInfo("Abyssal head", 7979,
             new MissingKillCountDrop());
     public static LogItemInfo ABYSSAL_LANTERN_26822 = new LogItemInfo("Abyssal lantern", 26822,
-            new BinomialDrop(new RollInfo(LogItemSourceInfo.RIFTS_SEARCHES, 1.0 / 700))
-                    .withConfigOption(CollectionLogLuckConfig.NUM_ABYSSAL_LANTERNS_PURCHASED_KEY));
+            // I believe only 1 is tracked, even if you purchase from the shop. Luck calculation is entirely disabled
+            // if > 0 have been purchased.
+//            new FiniteBinomialDrop(new RollInfo(LogItemSourceInfo.RIFTS_SEARCHES, 1.0 / 700), 1)
+//                    .withConfigOption(CollectionLogLuckConfig.NUM_ABYSSAL_LANTERNS_PURCHASED_KEY));
+            // It's very difficult to calculate luck because of the combination of max 1 being tracked and it being
+            // purchaseable. We can only calculate luck reliably for people who have never purchased one AND have never
+            // received one.
+            new DeterministicDrop());
     public static LogItemInfo ABYSSAL_NEEDLE_26813 = new LogItemInfo("Abyssal needle", 26813,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.RIFTS_SEARCHES, 1.0 / 300)));
     // Note: This represents the effective chance of dropping from the boss, NOT the chance given your # of Unsired.
