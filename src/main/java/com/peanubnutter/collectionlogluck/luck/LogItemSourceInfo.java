@@ -6,6 +6,8 @@ public enum LogItemSourceInfo {
     // Currently, only item sources with KCs in the collection log are listed
     ABYSSAL_SIRE_KILLS("Abyssal Sire kills"),
     ALCHEMICAL_HYDRA_KILLS("Alchemical Hydra kills"),
+    AMOXLIATL_KILLS("Amoxliatl kills"),
+    ARAXXOR_KILLS("Araxxor kills"),
     ARTIO_KILLS("Artio kills"),
     BARROWS_CHESTS_OPENED("Barrows Chests opened"),
     BEGINNER_CLUES_COMPLETED("Beginner clues completed"),
@@ -38,6 +40,7 @@ public enum LogItemSourceInfo {
     HARD_CLUES_COMPLETED("Hard clues completed"),
     HESPORI_KILLS("Hespori kills"),
     HIGH_LEVEL_GAMBLES("High-level Gambles"),
+    HUEYCOATL_KILLS("Hueycoatl kills"),
     KALPHITE_QUEEN_KILLS("Kalphite Queen kills"),
     KING_BLACK_DRAGON_KILLS("King Black Dragon kills"),
     KRAKEN_KILLS("Kraken kills"),
@@ -47,18 +50,26 @@ public enum LogItemSourceInfo {
     LAST_MAN_STANDING_KILLS("Last Man Standing Kills"),
     LAST_MAN_STANDING_WINS("Last Man Standing Wins"),
     LEVIATHAN_KILLS("Leviathan kills"),
+    // Moons of Peril
     LUNAR_CHESTS_OPENED("Lunar Chests opened"),
     MASTER_CLUES_COMPLETED("Master clues completed"),
     MEDIUM_CLUES_COMPLETED("Medium clues completed"),
     NEX_KILLS("Nex kills"),
     NIGHTMARE_KILLS("Nightmare kills"),
     OBOR_KILLS("Obor kills"),
+    // Mastering Mixology
+    ORDERS_FULFILLED("Orders fulfilled"),
     PHANTOM_MUSPAH_KILLS("Phantom Muspah kills"),
     PHOSANIS_NIGHTMARE_KILLS("Phosani's Nightmare kills"),
     REVENANT_KILLS("Revenant kills"),
+    // Tempoross
     REWARD_PERMITS_CLAIMED("Reward permits claimed"),
+    // Wintertodt
+    REWARDS_CLAIMED("Rewards claimed"),
     RIFTS_CLOSED("Rifts closed"),
     RIFTS_SEARCHES("Rifts searches"),
+    ROYAL_TITAN_KILLS("Royal Titan kills"),
+    // Hunter Guild
     RUMOURS_COMPLETED("Rumours Completed"),
     SARACHNIS_KILLS("Sarachnis kills"),
     SCORPIA_KILLS("Scorpia kills"),
@@ -66,7 +77,9 @@ public enum LogItemSourceInfo {
     SKOTIZO_KILLS("Skotizo kills"),
     SOL_HEREDIT_KILLS("Sol Heredit kills"),
     SPINDEL_KILLS("Spindel kills"),
+    // Soul Wars
     SPOILS_OF_WAR_OPENED("Spoils of war opened"),
+    // Giants' Foundry
     SWORDS_CREATED("Swords created"),
     TEMPOROSS_KILLS("Tempoross kills"),
     THEATRE_OF_BLOOD_COMPLETIONS("Theatre of Blood completions"),

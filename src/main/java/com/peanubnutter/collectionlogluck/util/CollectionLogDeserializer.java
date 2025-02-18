@@ -65,7 +65,7 @@ public class CollectionLogDeserializer implements JsonDeserializer<CollectionLog
                         // Uncomment to update LogItemSourceInfo list
 //                        LogItemSourceInfo logItemSourceInfo = LogItemSourceInfo.findByName(newKillCount.getName());
 //                        if (logItemSourceInfo == null) {
-//                            System.out.println("New collection log page detected!: (" + newKillCount.getName() + ")");
+//                            System.out.println("!!!!!!!!!!New collection log page detected!: (" + newKillCount.getName() + ")");
 //                        }
                     }
                 }

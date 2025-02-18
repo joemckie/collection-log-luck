@@ -10,6 +10,7 @@ import com.peanubnutter.collectionlogluck.luck.drop.AbstractDrop;
 import com.peanubnutter.collectionlogluck.luck.drop.DropLuck;
 import com.peanubnutter.collectionlogluck.model.CollectionLog;
 import com.peanubnutter.collectionlogluck.model.CollectionLogItem;
+import com.peanubnutter.collectionlogluck.model.CollectionLogKillCount;
 import com.peanubnutter.collectionlogluck.model.CollectionLogPage;
 import com.peanubnutter.collectionlogluck.util.CollectionLogDeserializer;
 import com.peanubnutter.collectionlogluck.util.CollectionLogLuckApiClient;
@@ -21,10 +22,15 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameStateChanged;
+import net.runelite.api.events.ScriptPostFired;
+import net.runelite.api.events.WidgetLoaded;
+import net.runelite.api.widgets.ComponentID;
+import net.runelite.api.widgets.InterfaceID;
+import net.runelite.api.widgets.Widget;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.chat.ChatCommandManager;
-import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.ChatMessageBuilder;
+import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -40,6 +46,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 import javax.inject.Inject;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
@@ -49,6 +56,7 @@ import java.util.Map;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -66,13 +74,18 @@ public class CollectionLogLuckPlugin extends Plugin {
     private static final String COLLECTION_LOG_LUCK_COMMAND_STRING = "!luck";
     private static final Pattern COLLECTION_LOG_LUCK_COMMAND_PATTERN = Pattern.compile("!luck\\s*(.+)\\s*", Pattern.CASE_INSENSITIVE);
     private static final String COLLECTION_LOG_LUCK_CONFIG_GROUP = "collectionlogluck";
+    private static final int ADVENTURE_LOG_COLLECTION_LOG_SELECTED_VARBIT_ID = 12061;
+    private static final Pattern ADVENTURE_LOG_TITLE_PATTERN = Pattern.compile("The Exploits of (.+)");
+    private static final Color WARNING_TEXT_COLOR = Color.RED.darker();
 
-    private final String pluginVersion = "v1.1.0";
+
+    // Make sure to update this version to show the plugin message below.
+    private final String pluginVersion = "v1.2.0";
     private final String pluginMessage = "<colHIGHLIGHT>Collection Log Luck " + pluginVersion + ":<br>" +
-            "<colHIGHLIGHT>* Fixed shared clue items. Visual tweaks.<br>" +
-            "<colHIGHLIGHT>* Support Tormented Demon drops and Nightmare buff settings<br>" +
-            "<colHIGHLIGHT>* Support abyssal bludgeon, Moons of Peril, Wintertodt<br>" +
-            "<colHIGHLIGHT>* This update message can be hidden in settings";
+            "<colHIGHLIGHT>* Detect stale collectionlog.net data to fix calculations when viewing log.<br>" +
+            "<colHIGHLIGHT>* Update luck without having to relog after each kill / drop.<br>" +
+            "<colHIGHLIGHT>* Hueycoatl and Royal Titans (please update team size, etc. in settings).<br>" +
+            "<colHIGHLIGHT>* Wintertodt rework, Moxi, special items like Tempoross, GoTR<br>";
 
     private Map<Integer, Integer> loadedCollectionLogIcons;
 
@@ -82,6 +95,14 @@ public class CollectionLogLuckPlugin extends Plugin {
 
     // caches luck calculations per username+luckCalculationID. Cleared on logout (including hopping worlds).
     private Map<String, LuckCalculationResult> luckCalculationResults;
+
+    // Map of the player's seen item counts and boss KC in the collection log
+    private Map<Integer, Integer> seenItemCounts;
+    private Map<String, Integer> seenKillCounts;
+    // Only warn players of desynced collection log once per login.
+    private boolean desyncReminderSent;
+
+    private boolean isPohOwner = false;
 
     @Getter
     @Inject
@@ -104,6 +125,9 @@ public class CollectionLogLuckPlugin extends Plugin {
 
     @Inject
     private CollectionLogLuckApiClient apiClient;
+
+    @Inject
+    private ScheduledExecutorService executor;
 
     @Inject
     private JsonUtils jsonUtils;
@@ -129,6 +153,9 @@ public class CollectionLogLuckPlugin extends Plugin {
         loadedCollectionLogIcons = new HashMap<>();
         loadedCollectionLogs = new HashMap<>();
         luckCalculationResults = new HashMap<>();
+        seenItemCounts = new HashMap<>();
+        seenKillCounts = new HashMap<>();
+        desyncReminderSent = false;
 
         chatCommandManager.registerCommandAsync(COLLECTION_LOG_LUCK_COMMAND_STRING, this::processLuckCommandMessage);
     }
@@ -137,25 +164,33 @@ public class CollectionLogLuckPlugin extends Plugin {
     protected void shutDown() {
         overlayManager.remove(collectionLogWidgetItemOverlay);
 
+        clearCache();
+
+        chatCommandManager.unregisterCommand(COLLECTION_LOG_LUCK_COMMAND_STRING);
+    }
+
+    protected void clearCache() {
         loadedCollectionLogIcons.clear();
         loadedCollectionLogs.clear();
         luckCalculationResults.clear();
-
-        chatCommandManager.unregisterCommand(COLLECTION_LOG_LUCK_COMMAND_STRING);
+        // We could probably avoid clearing these on logout, to help the user figure out when their collection log has
+        // been updated properly, but it might also warn users every time they log in, so just defer the warning until
+        // they actually try to calculate luck for an out of date item.
+        seenItemCounts.clear();
+        seenKillCounts.clear();
+        desyncReminderSent = false;
     }
 
     @Subscribe
     public void onGameStateChanged(GameStateChanged gameStateChanged) {
         if (!isValidWorldType()) {
-            loadedCollectionLogs.clear();
-            luckCalculationResults.clear();
+            clearCache();
             return;
         }
 
         if (gameStateChanged.getGameState() == GameState.LOGIN_SCREEN ||
                 gameStateChanged.getGameState() == GameState.HOPPING) {
-            loadedCollectionLogs.clear();
-            luckCalculationResults.clear();
+            clearCache();
         }
 
         if (gameStateChanged.getGameState() != GameState.LOGGED_IN) return;
@@ -226,10 +261,14 @@ public class CollectionLogLuckPlugin extends Plugin {
         String username = client.getLocalPlayer().getName();
 
         fetchCollectionLog(username, true, collectionLog -> {
+            checkForOutOfSyncCollectionLogData(collectionLog);
+
             // fetching may be async, but we need to be back on client thread to add chat message.
             clientThread.invoke(() -> {
                 String message = buildLuckCommandMessage(collectionLog, checkLuckMatcher.group(2), false);
-
+                // Jagex added some "CA_ID: #### |" format thing to the beginning of messages which messes up message
+                // parsing. Adding this as a hack to bypass whatever is stripping the message.
+                message = "|" + message;
                 client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", message, null);
             });
         });
@@ -256,11 +295,94 @@ public class CollectionLogLuckPlugin extends Plugin {
         String username = getChatMessageSenderUsername(chatMessage);
 
         fetchCollectionLog(username, true, collectionLog -> {
+            checkForOutOfSyncCollectionLogData(collectionLog);
+
             // fetching may be async, but we need to be back on client thread to modify chat message.
             clientThread.invoke(() -> {
                 replaceCommandMessage(chatMessage, message, collectionLog);
             });
         });
+    }
+
+    @Subscribe
+    public void onScriptPostFired(ScriptPostFired scriptPostFired) {
+        if (scriptPostFired.getScriptId() == ScriptID.COLLECTION_DRAW_LIST) {
+            clientThread.invokeLater(this::cacheCollectionLogPageData);
+        }
+    }
+
+    // The general strategy is to cache any item counts we've seen, and then whenever the player tries to get
+    // luck for any of those items (whether through chat command or visual overlay), we warn the player if the
+    // collectionlog.net data is out of date.
+    protected void cacheCollectionLogPageData() {
+        if (!isValidWorldType()) {
+            return;
+        }
+
+        boolean openedFromAdventureLog = client.getVarbitValue(ADVENTURE_LOG_COLLECTION_LOG_SELECTED_VARBIT_ID) != 0;
+        if (openedFromAdventureLog && !isPohOwner) {
+            return;
+        }
+
+        Widget pageHead = client.getWidget(ComponentID.COLLECTION_LOG_ENTRY_HEADER);
+        if (pageHead == null) {
+            return;
+        }
+
+        Widget itemsContainer = client.getWidget(ComponentID.COLLECTION_LOG_ENTRY_ITEMS);
+        if (itemsContainer == null) {
+            return;
+        }
+
+        Widget[] widgetItems = itemsContainer.getDynamicChildren();
+        for (Widget widgetItem : widgetItems) {
+            boolean isObtained = widgetItem.getOpacity() == 0;
+            int quantity = isObtained ? widgetItem.getItemQuantity() : 0;
+
+            // TODO: prepend the key with the player's username if ever supporting adventure log
+            seenItemCounts.put(widgetItem.getId(), quantity);
+        }
+
+        Widget[] children = pageHead.getDynamicChildren();
+        // page has killcount widgets
+        if (children.length >= 3) {
+            Widget[] killCountWidgets = Arrays.copyOfRange(children, 2, children.length);
+            for (Widget killCountWidget : killCountWidgets) {
+                String killCountString = killCountWidget.getText();
+                // The "sequence" parameter value does not matter and will be ignored.
+                CollectionLogKillCount killCount = CollectionLogKillCount.fromString(killCountString, 0);
+
+                // TODO: prepend the key with the player's username if ever supporting adventure log
+                seenKillCounts.put(killCount.getName(), killCount.getAmount());
+            }
+        }
+
+        // Update collection log immediately if out of sync errors were found. Note: Assumes this is the local player
+        // and not the adventure log.
+        // Run in background to avoid delaying collection log rendering.
+        executor.submit(() -> fetchCollectionLog(client.getLocalPlayer().getName(), true, this::checkForOutOfSyncCollectionLogData));
+    }
+
+    @Subscribe
+    public void onWidgetLoaded(WidgetLoaded widgetLoaded) {
+        if (!isValidWorldType()) {
+            return;
+        }
+
+        if (widgetLoaded.getGroupId() == InterfaceID.ADVENTURE_LOG) {
+            Widget adventureLog = client.getWidget(ComponentID.ADVENTURE_LOG_CONTAINER);
+            if (adventureLog == null) {
+                return;
+            }
+
+            // Children are rendered on tick after widget load. Invoke later to prevent null children on adventure log widget
+            clientThread.invokeLater(() -> {
+                Matcher adventureLogUser = ADVENTURE_LOG_TITLE_PATTERN.matcher(adventureLog.getChild(1).getText());
+                if (adventureLogUser.find()) {
+                    isPohOwner = adventureLogUser.group(1).equals(client.getLocalPlayer().getName());
+                }
+            });
+        }
     }
 
     // Fetch the collection log for this username, then call the callback. If allowAsync is set to false,
@@ -279,6 +401,12 @@ public class CollectionLogLuckPlugin extends Plugin {
                     @Override
                     public void onFailure(@NonNull Call call, @NonNull IOException e) {
                         log.error("Unable to retrieve collection log: " + e.getMessage());
+
+                        // NOTE: Maybe we should clear the loaded collection logs if this failed.
+                        // For now, keep the collectionLogFuture mapping to avoid issues like repeated
+                        // spamming the collectionlog.net website if some issue occurs.
+                        // loadedCollectionLogs.remove(sanitizedUsername);
+
                         collectionLogFuture.complete(null);
                     }
 
@@ -288,6 +416,11 @@ public class CollectionLogLuckPlugin extends Plugin {
                         response.close();
 
                         if (collectionLogJson == null) {
+                            // NOTE: Maybe we should clear the loaded collection logs if this failed.
+                            // For now, keep the collectionLogFuture mapping to avoid issues like repeated
+                            // spamming the collectionlog.net website if some issue occurs.
+                            // loadedCollectionLogs.remove(sanitizedUsername);
+
                             collectionLogFuture.complete(null);
                             return;
                         }
@@ -297,22 +430,95 @@ public class CollectionLogLuckPlugin extends Plugin {
                                 CollectionLog.class,
                                 new CollectionLogDeserializer()
                         );
+
                         collectionLogFuture.complete(collectionLog);
                     }
                 });
             }
 
             CompletableFuture<CollectionLog> collectionLogFuture = loadedCollectionLogs.get(sanitizedUsername);
+
+            CollectionLog collectionLog;
             if (allowAsync) {
-                callback.accept(collectionLogFuture.get());
+                collectionLog = collectionLogFuture.get();
             } else {
                 // Return the value if present, otherwise return null
-                callback.accept(collectionLogFuture.getNow(null));
+                collectionLog = collectionLogFuture.getNow(null);
             }
+            callback.accept(collectionLog);
         } catch (IOException | ExecutionException | CancellationException | InterruptedException e) {
             log.error("Unable to retrieve collection log: " + e.getMessage());
+
+            // NOTE: Maybe we should clear the loaded collection logs if this failed.
+            // For now, keep the collectionLogFuture mapping to avoid issues like repeated
+            // spamming the collectionlog.net website if some issue occurs.
+            // loadedCollectionLogs.remove(sanitizedUsername);
+
             callback.accept(null);
         }
+    }
+
+    // Check for out of sync data, correct any issues that were found, and print a warning message.
+    protected void checkForOutOfSyncCollectionLogData(CollectionLog collectionLog) {
+        // This will be null if collection log has not been loaded yet.
+        if (collectionLog == null) return;
+
+        // only correct out of sync issues for the local player
+        if (!isLocalPlayerCollectionLog(collectionLog)) return;
+
+        if (desyncReminderSent) return;
+
+        if (fixOutOfSyncCollectionLogData(collectionLog)) {
+            String warningText =
+                    "Collection Log Luck plugin: WARNING: Your collection log is out of sync with collectionlog.net." +
+                    " If you send a !luck chat message, other players may see out of date data." +
+                    " Please upload your collection log using the Collection Log Plugin and re-log.";
+            String outOfSyncWarning = new ChatMessageBuilder()
+                .append(WARNING_TEXT_COLOR, warningText)
+                .build();
+
+            // fetching may be async, but we need to be back on client thread to add chat message.
+            clientThread.invoke(() -> {
+                client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", outOfSyncWarning, null);
+            });
+
+            desyncReminderSent = true;
+        }
+    }
+
+    protected boolean fixOutOfSyncCollectionLogData(CollectionLog collectionLog) {
+        boolean foundDesync = false;
+
+        // check obtained item counts
+        for (Integer itemId : seenItemCounts.keySet()) {
+            LogItemInfo logItemInfo = LogItemInfo.findByItemId(itemId);
+            if (logItemInfo == null) continue;
+
+            CollectionLogItem item = collectionLog.searchForItem(logItemInfo.getItemName());
+            if (item == null) continue;
+
+            // Out of date unsupported drops don't matter
+            String incalculableReason = logItemInfo.getDropProbabilityDistribution().getIncalculableReason(item, config);
+            if (incalculableReason != null) continue;
+
+            if (seenItemCounts.get(itemId) != item.getQuantity()) {
+                item.setQuantity(seenItemCounts.get(itemId));
+                foundDesync = true;
+            }
+        }
+
+        // check kill counts
+        for (String dropSource : seenKillCounts.keySet()) {
+            CollectionLogKillCount collectionLogKc = collectionLog.searchForKillCount(dropSource);
+            if (collectionLogKc == null) continue;
+
+            if (seenKillCounts.get(dropSource) != collectionLogKc.getAmount()) {
+                collectionLogKc.setAmount(seenKillCounts.get(dropSource));
+                foundDesync = true;
+            }
+        }
+
+        return foundDesync;
     }
 
     // Calculate luck for this item, caching results
@@ -321,7 +527,19 @@ public class CollectionLogLuckPlugin extends Plugin {
                                                                CollectionLog collectionLog,
                                                                CollectionLogLuckConfig calculationConfig) {
         String username = Text.sanitize(collectionLog.getUsername());
-        String calculationId = username + "|" + item.getId();
+
+        // If the client first calculates luck for an item, its result will be cached. Then, if the client
+        // opens the corresponding page and discovers that the page is out of date with collectionlog.net, that item
+        // will not be recalculated even though it should.
+        // To solve this, we could clear calculation results for any item that is found to be out of date,
+        // but the problem is that the client will then recalculate every single frame when displaying luck for an
+        // out of date page.
+        // Instead, we can simply add the kc and item quantity to the calculation ID. Then, we don't need to
+        // clear calculation results at all, since upon discovering an item is out of date, the key will change and the
+        // luck will be recalculated.
+        // The killcount description could be long, but it is necessary
+        String calculationId = username + "|" + item.getId() + "|" + item.getQuantity() + "|"
+                + dropLuck.getKillCountDescription(collectionLog);
 
         // Only calculate if necessary
         if (!luckCalculationResults.containsKey(calculationId)) {
@@ -403,6 +621,16 @@ public class CollectionLogLuckPlugin extends Plugin {
         return itemDisplayName;
     }
 
+    private String getWarningString(String message) {
+        return new ChatMessageBuilder()
+            .append(WARNING_TEXT_COLOR, message)
+            .build();
+    }
+
+    private boolean isLocalPlayerCollectionLog(CollectionLog collectionLog) {
+         return client.getLocalPlayer().getName().equalsIgnoreCase(collectionLog.getUsername());
+    }
+
     /**
      * Builds the replacement messages for the !luck... command
      *
@@ -413,26 +641,27 @@ public class CollectionLogLuckPlugin extends Plugin {
      * @return Replacement message
      */
     private String buildLuckCommandMessage(CollectionLog collectionLog, String commandTarget, boolean useFuzzyMatch) {
-        boolean collectionLogIsLocalPlayer =
-                client.getLocalPlayer().getName().equalsIgnoreCase(collectionLog.getUsername());
+        boolean collectionLogIsLocalPlayer = isLocalPlayerCollectionLog(collectionLog);
 
         if (collectionLogIsLocalPlayer && config.hidePersonalLuckCalculation()) {
             // This should make it obvious that 1) The player can go to the config to change this setting, and 2) other
             // players can still see their luck if they type in a !log luck command.
-            return "Collection Log Luck plugin: Your luck is set to be hidden from you in the plugin config.";
+            return getWarningString(
+                    "Collection Log Luck plugin: Your luck is set to be hidden from you in the plugin config.");
         }
         // !luck [account|total|overall]
         if (commandTarget == null
                 || commandTarget.equalsIgnoreCase("account")
                 || commandTarget.equalsIgnoreCase("total")
                 || commandTarget.equalsIgnoreCase("overall")) {
-            return "Collection Log Luck plugin: Account-level luck calculation is not yet supported.";
+            return getWarningString("Collection Log Luck plugin: Account-level luck calculation is not yet supported.");
         }
 
         // !luck <page-name>
         String pageName = CollectionLogPage.aliasPageName(commandTarget);
         if (collectionLog.searchForPage(pageName) != null) {
-            return "Collection Log Luck plugin: Per-activity or per-page luck calculation is not yet supported.";
+            return getWarningString(
+                    "Collection Log Luck plugin: Per-activity or per-page luck calculation is not yet supported.");
         }
 
         // !luck <item-name>
@@ -443,14 +672,15 @@ public class CollectionLogLuckPlugin extends Plugin {
 
         CollectionLogItem item = collectionLog.searchForItem(itemName);
         if (item == null) {
-            return "Collection Log Luck plugin: Item " + itemName + " is not recognized.";
+            return getWarningString("Collection Log Luck plugin: Item " + itemName + " is not recognized.");
         }
         int numObtained = item.getQuantity();
 
         LogItemInfo logItemInfo = LogItemInfo.findByName(itemName);
         if (logItemInfo == null) {
             // This likely only happens if there is an update and the plugin does not yet support new items.
-            return "Collection Log Luck plugin: Item " + itemName + " is not yet supported for luck calculation.";
+            return getWarningString(
+                    "Collection Log Luck plugin: Item " + itemName + " is not yet supported for luck calculation.");
         }
 
         String warningText = "";
@@ -485,7 +715,7 @@ public class CollectionLogLuckPlugin extends Plugin {
         double luck = luckCalculationResult.getLuck();
         double dryness = luckCalculationResult.getDryness();
         if (luck < 0 || luck > 1 || dryness < 0 || dryness > 1) {
-            return "Collection Log Luck plugin: Unknown error calculating luck for item.";
+            return getWarningString("Collection Log Luck plugin: Unknown error calculating luck for item.");
         }
 
         int luckPercentile = (int) Math.round(luckCalculationResult.getOverallLuck() * 100);
@@ -534,7 +764,7 @@ public class CollectionLogLuckPlugin extends Plugin {
                 .append(luckCalculationResult.getLuckColor(), shownLuckText.toString())
                 .append(" in ")
                 .append(kcDescription)
-                .append(warningText)
+                .append(WARNING_TEXT_COLOR, warningText)
                 .build();
     }
 
