@@ -4218,8 +4218,8 @@ public class LogItemInfo {
     public static LogItemInfo FROZEN_TEAR_29895 = new LogItemInfo("Frozen tear", 29895, new MissingKillCountDrop());
     public static LogItemInfo BRAN_30622 = new LogItemInfo("Bran", 30622,
             // The pet is supposedly NOT affected by contribution.
-//            new BinomialDrop(new RollInfo(LogItemSourceInfo.ROYAL_TITAN_KILLS, 1.0 / 3000)));
-            new UnimplementedDrop());
+            new BinomialDrop(new RollInfo(LogItemSourceInfo.ROYAL_TITAN_KILLS, 1.0 / 3000))
+                    .withConfigOption("Bran"));
     public static LogItemInfo DEADEYE_PRAYER_SCROLL_30626 = new LogItemInfo("Deadeye prayer scroll", 30626,
             new InterchangeableSetFiniteBinomialDrop(new RollInfo(LogItemSourceInfo.ROYAL_TITAN_KILLS, 1.0 / 83.33),
                     ImmutableList.of(30626, 30627),
@@ -4228,7 +4228,9 @@ public class LogItemInfo {
                     // corpse will be considered dry even though it's their fault / choice that they aren't receiving
                     // both drops.
                     2
-            ).withConfigOption(CollectionLogLuckConfig.AVG_ROYAL_TITANS_CONTRIBUTION_KEY));
+            )
+                    .withConfigOption(CollectionLogLuckConfig.AVG_ROYAL_TITANS_CONTRIBUTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.NUM_ROYAL_TITANS_SACRIFICED_KEY));
     public static LogItemInfo MYSTIC_VIGOUR_PRAYER_SCROLL_30627 = new LogItemInfo("Mystic vigour prayer scroll", 30627,
             new InterchangeableSetFiniteBinomialDrop(new RollInfo(LogItemSourceInfo.ROYAL_TITAN_KILLS, 1.0 / 83.33),
                     ImmutableList.of(30626, 30627),
@@ -4237,22 +4239,29 @@ public class LogItemInfo {
                     // corpse will be considered dry even though it's their fault / choice that they aren't receiving
                     // both drops.
                     2
-            ).withConfigOption(CollectionLogLuckConfig.AVG_ROYAL_TITANS_CONTRIBUTION_KEY));
+            )
+                    .withConfigOption(CollectionLogLuckConfig.AVG_ROYAL_TITANS_CONTRIBUTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.NUM_ROYAL_TITANS_SACRIFICED_KEY));
     public static LogItemInfo GIANTSOUL_AMULET_UNCHARGED_30637 = new LogItemInfo("Giantsoul amulet (uncharged)", 30637,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.ROYAL_TITAN_KILLS, 1.0 / 16.67))
-                    .withConfigOption(CollectionLogLuckConfig.AVG_ROYAL_TITANS_CONTRIBUTION_KEY));
+                    .withConfigOption(CollectionLogLuckConfig.AVG_ROYAL_TITANS_CONTRIBUTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.NUM_ROYAL_TITANS_SACRIFICED_KEY));
     public static LogItemInfo ICE_ELEMENT_STAFF_CROWN_30628 = new LogItemInfo("Ice element staff crown", 30628,
             new InterchangeableSetBinomialDrop(
                     new RollInfo(LogItemSourceInfo.ROYAL_TITAN_KILLS, 1.0 / 83.33),
                     ImmutableList.of(30628, 30631)
-            ).withConfigOption(CollectionLogLuckConfig.AVG_ROYAL_TITANS_CONTRIBUTION_KEY));
+            )
+                    .withConfigOption(CollectionLogLuckConfig.AVG_ROYAL_TITANS_CONTRIBUTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.NUM_ROYAL_TITANS_SACRIFICED_KEY));
     public static LogItemInfo FIRE_ELEMENT_STAFF_CROWN_30631 = new LogItemInfo("Fire element staff crown", 30631,
             new InterchangeableSetBinomialDrop(
                     new RollInfo(LogItemSourceInfo.ROYAL_TITAN_KILLS, 1.0 / 83.33),
                     ImmutableList.of(30628, 30631)
-            ).withConfigOption(CollectionLogLuckConfig.AVG_ROYAL_TITANS_CONTRIBUTION_KEY));
+            )
+                    .withConfigOption(CollectionLogLuckConfig.AVG_ROYAL_TITANS_CONTRIBUTION_KEY)
+                    .withConfigOption(CollectionLogLuckConfig.NUM_ROYAL_TITANS_SACRIFICED_KEY));
     public static LogItemInfo DESICCATED_PAGE_30640 = new LogItemInfo("Desiccated page", 30640,
-            // missing because there are "take pages" and "destroy corpse for pet chance" options instead of regular loot
+            // missing because there are "take pages" and "sacrifice corpse for pet chance" options instead of regular loot
             new MissingKillCountDrop());
     public static LogItemInfo HUBERTE_30152 = new LogItemInfo("Huberte", 30152,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.HUEYCOATL_KILLS, 1.0 / 400))

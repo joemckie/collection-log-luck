@@ -1,6 +1,7 @@
 package com.peanubnutter.collectionlogluck.luck.drop;
 
 import com.peanubnutter.collectionlogluck.CollectionLogLuckConfig;
+import com.peanubnutter.collectionlogluck.luck.LogItemInfo;
 import com.peanubnutter.collectionlogluck.model.CollectionLog;
 import com.peanubnutter.collectionlogluck.model.CollectionLogItem;
 import com.peanubnutter.collectionlogluck.luck.LogItemSourceInfo;
@@ -10,7 +11,9 @@ import com.google.common.collect.ImmutableMap;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -1265,5 +1268,212 @@ public class DropConfigOptionsTest {
         double actualDryness = drop.calculateDryness(mockItem, mockCollectionLog, config);
         assertEquals(expectedDryness, actualDryness, tolerance);
     }
+
+    @Test
+    public void calculateLuck_RoyalTitans_uniques_nosacrifice() {
+        int kc = 100;
+        int corpsesSacrificed = 0;
+
+        int numObtained = 1;
+
+        double expectedLuck = 0.54781;
+        double expectedDryness = 0.12151;
+        double tolerance = 0.00001;
+
+        CollectionLogLuckConfig config = new CollectionLogLuckConfig() {
+            @Override
+            public int numRoyalTitansSacrificed() {
+                return corpsesSacrificed;
+            }
+
+            @Override
+            public double avgRoyalTitansContribution() {
+                return 0.5;
+            }
+        };
+
+        DropLuck drop = LogItemInfo.DEADEYE_PRAYER_SCROLL_30626.getDropProbabilityDistribution();
+
+        CollectionLogItem mockItem1 = new CollectionLogItem(
+                LogItemInfo.DEADEYE_PRAYER_SCROLL_30626.getItemId(),
+                LogItemInfo.DEADEYE_PRAYER_SCROLL_30626.getItemName(),
+                0,
+                false,
+                0);
+
+        CollectionLogItem mockItem2= new CollectionLogItem(
+                LogItemInfo.MYSTIC_VIGOUR_PRAYER_SCROLL_30627.getItemId(),
+                LogItemInfo.MYSTIC_VIGOUR_PRAYER_SCROLL_30627.getItemName(),
+                numObtained,
+                true,
+                0);
+
+        List<CollectionLogItem> items = new ArrayList<>();
+        items.add(mockItem1);
+        items.add(mockItem2);
+
+        CollectionLog mockCollectionLog = CollectionLogLuckTestUtils.getMockCollectionLogWithKcsAndItems(
+                ImmutableMap.of(LogItemSourceInfo.ROYAL_TITAN_KILLS.getName(), kc),
+                items
+        );
+        String incalculableReason = drop.getIncalculableReason(mockItem1, config);
+        assertNull(incalculableReason);
+
+        double actualLuck = drop.calculateLuck(mockItem1, mockCollectionLog, config);
+        assertEquals(expectedLuck, actualLuck, tolerance);
+
+        double actualDryness = drop.calculateDryness(mockItem1, mockCollectionLog, config);
+        assertEquals(expectedDryness, actualDryness, tolerance);
+    }
+
+    @Test
+    public void calculateLuck_RoyalTitans_uniques_withSacrifice() {
+        int kc = 150;
+        // brings the kc back down to 100, effectively
+        int corpsesSacrificed = 50;
+
+        int numObtained = 1;
+
+        double expectedLuck = 0.54781;
+        double expectedDryness = 0.12151;
+        double tolerance = 0.00001;
+
+        CollectionLogLuckConfig config = new CollectionLogLuckConfig() {
+            @Override
+            public int numRoyalTitansSacrificed() {
+                return corpsesSacrificed;
+            }
+
+            @Override
+            public double avgRoyalTitansContribution() {
+                return 0.5;
+            }
+        };
+
+        DropLuck drop = LogItemInfo.DEADEYE_PRAYER_SCROLL_30626.getDropProbabilityDistribution();
+
+        CollectionLogItem mockItem1 = new CollectionLogItem(
+                LogItemInfo.DEADEYE_PRAYER_SCROLL_30626.getItemId(),
+                LogItemInfo.DEADEYE_PRAYER_SCROLL_30626.getItemName(),
+                0,
+                false,
+                0);
+
+        CollectionLogItem mockItem2= new CollectionLogItem(
+                LogItemInfo.MYSTIC_VIGOUR_PRAYER_SCROLL_30627.getItemId(),
+                LogItemInfo.MYSTIC_VIGOUR_PRAYER_SCROLL_30627.getItemName(),
+                numObtained,
+                true,
+                0);
+
+        List<CollectionLogItem> items = new ArrayList<>();
+        items.add(mockItem1);
+        items.add(mockItem2);
+
+        CollectionLog mockCollectionLog = CollectionLogLuckTestUtils.getMockCollectionLogWithKcsAndItems(
+                ImmutableMap.of(LogItemSourceInfo.ROYAL_TITAN_KILLS.getName(), kc),
+                items
+        );
+        String incalculableReason = drop.getIncalculableReason(mockItem1, config);
+        assertNull(incalculableReason);
+
+        double actualLuck = drop.calculateLuck(mockItem1, mockCollectionLog, config);
+        assertEquals(expectedLuck, actualLuck, tolerance);
+
+        double actualDryness = drop.calculateDryness(mockItem1, mockCollectionLog, config);
+        assertEquals(expectedDryness, actualDryness, tolerance);
+    }
+
+    @Test
+    public void calculateLuck_RoyalTitans_pet_nosacrifice() {
+        int kc = 100;
+        int corpsesSacrificed = 0;
+
+        int numObtained = 1;
+
+        double expectedLuck = 0.96721;
+        double expectedDryness = 0.00054;
+        double tolerance = 0.00001;
+
+        CollectionLogLuckConfig config = new CollectionLogLuckConfig() {
+            @Override
+            public int numRoyalTitansSacrificed() {
+                return corpsesSacrificed;
+            }
+
+            @Override
+            public double avgRoyalTitansContribution() {
+                return 0.5;
+            }
+        };
+
+        DropLuck drop = LogItemInfo.BRAN_30622.getDropProbabilityDistribution();
+
+        CollectionLogItem mockItem = new CollectionLogItem(
+                LogItemInfo.BRAN_30622.getItemId(),
+                LogItemInfo.BRAN_30622.getItemName(),
+                numObtained,
+                true,
+                0);
+
+        CollectionLog mockCollectionLog = CollectionLogLuckTestUtils.getMockCollectionLogWithKc(
+                LogItemSourceInfo.ROYAL_TITAN_KILLS.getName(), kc);
+
+        String incalculableReason = drop.getIncalculableReason(mockItem, config);
+        assertNull(incalculableReason);
+
+        double actualLuck = drop.calculateLuck(mockItem, mockCollectionLog, config);
+        assertEquals(expectedLuck, actualLuck, tolerance);
+
+        double actualDryness = drop.calculateDryness(mockItem, mockCollectionLog, config);
+        assertEquals(expectedDryness, actualDryness, tolerance);
+    }
+
+    @Test
+    public void calculateLuck_RoyalTitans_pet_sacrifice() {
+        // effectively 190 trials
+        int kc = 100;
+        int corpsesSacrificed = 90;
+
+        int numObtained = 1;
+
+        double expectedLuck = 0.93862;
+        double expectedDryness = 0.00191;
+        double tolerance = 0.00001;
+
+        CollectionLogLuckConfig config = new CollectionLogLuckConfig() {
+            @Override
+            public int numRoyalTitansSacrificed() {
+                return corpsesSacrificed;
+            }
+
+            @Override
+            public double avgRoyalTitansContribution() {
+                return 0.5;
+            }
+        };
+
+        DropLuck drop = LogItemInfo.BRAN_30622.getDropProbabilityDistribution();
+
+        CollectionLogItem mockItem = new CollectionLogItem(
+                LogItemInfo.BRAN_30622.getItemId(),
+                LogItemInfo.BRAN_30622.getItemName(),
+                numObtained,
+                true,
+                0);
+
+        CollectionLog mockCollectionLog = CollectionLogLuckTestUtils.getMockCollectionLogWithKc(
+                LogItemSourceInfo.ROYAL_TITAN_KILLS.getName(), kc);
+
+        String incalculableReason = drop.getIncalculableReason(mockItem, config);
+        assertNull(incalculableReason);
+
+        double actualLuck = drop.calculateLuck(mockItem, mockCollectionLog, config);
+        assertEquals(expectedLuck, actualLuck, tolerance);
+
+        double actualDryness = drop.calculateDryness(mockItem, mockCollectionLog, config);
+        assertEquals(expectedDryness, actualDryness, tolerance);
+    }
+
 
 }

@@ -33,6 +33,7 @@ public interface CollectionLogLuckConfig extends Config
 	String NUM_INFERNAL_CAPES_SACRIFICED_KEY = "num_infernal_capes_sacrificed";
 	String NUM_DIZANAS_QUIVERS_SACRIFICED_KEY = "num_dizanas_quivers_sacrificed";
 	String NUM_ARAXXOR_DESTROYED_KEY = "num_araxxor_destroyed";
+	String NUM_ROYAL_TITANS_SACRIFICED_KEY = "num_royal_titans_sacrificed";
 	String AVG_CALLISTO_CONTRIBUTION_KEY = "avg_callisto_contribution";
 	String AVG_VENENATIS_CONTRIBUTION_KEY = "avg_venenatis_contribution";
 	String AVG_VETION_CONTRIBUTION_KEY = "avg_vetion_contribution";
@@ -428,6 +429,17 @@ public interface CollectionLogLuckConfig extends Config
 			section = luckSection
 	)
 	default int numAraxxorDestroyed() {
+		return 0;
+	}
+
+	@ConfigItem(
+			keyName = NUM_ROYAL_TITANS_SACRIFICED_KEY,
+			name = "# Royal Titans sacrificed",
+			description = "The number of Royal Titans corpses sacrificed for a chance at Bran.",
+			position = 24,
+			section = luckSection
+	)
+	default int numRoyalTitansSacrificed() {
 		return 0;
 	}
 
