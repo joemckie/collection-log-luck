@@ -80,11 +80,12 @@ public class CollectionLogLuckPlugin extends Plugin {
 
 
     // Make sure to update this version to show the plugin message below.
-    private final String pluginVersion = "v1.1.1";
+    private final String pluginVersion = "v1.2.0";
     private final String pluginMessage = "<colHIGHLIGHT>Collection Log Luck " + pluginVersion + ":<br>" +
-            "<colHIGHLIGHT>* Support Araxxor.<br>" +
-            "<colHIGHLIGHT>* Support Smol Heredit.<br>" +
-            "<colHIGHLIGHT>* Added config options for sacrificing Dizana's Quivers and Araxxor corpses.<br>";
+            "<colHIGHLIGHT>* Detect stale collectionlog.net data to fix calculations when viewing log.<br>" +
+            "<colHIGHLIGHT>* Update luck without having to relog after each kill / drop.<br>" +
+            "<colHIGHLIGHT>* Hueycoatl and Royal Titans (please update team size, etc. in settings).<br>" +
+            "<colHIGHLIGHT>* Wintertodt rework, Moxi, special items like Tempoross, GoTR<br>";
 
     private Map<Integer, Integer> loadedCollectionLogIcons;
 
@@ -400,6 +401,12 @@ public class CollectionLogLuckPlugin extends Plugin {
                     @Override
                     public void onFailure(@NonNull Call call, @NonNull IOException e) {
                         log.error("Unable to retrieve collection log: " + e.getMessage());
+
+                        // NOTE: Maybe we should clear the loaded collection logs if this failed.
+                        // For now, keep the collectionLogFuture mapping to avoid issues like repeated
+                        // spamming the collectionlog.net website if some issue occurs.
+                        // loadedCollectionLogs.remove(sanitizedUsername);
+
                         collectionLogFuture.complete(null);
                     }
 
@@ -409,6 +416,11 @@ public class CollectionLogLuckPlugin extends Plugin {
                         response.close();
 
                         if (collectionLogJson == null) {
+                            // NOTE: Maybe we should clear the loaded collection logs if this failed.
+                            // For now, keep the collectionLogFuture mapping to avoid issues like repeated
+                            // spamming the collectionlog.net website if some issue occurs.
+                            // loadedCollectionLogs.remove(sanitizedUsername);
+
                             collectionLogFuture.complete(null);
                             return;
                         }
@@ -418,6 +430,7 @@ public class CollectionLogLuckPlugin extends Plugin {
                                 CollectionLog.class,
                                 new CollectionLogDeserializer()
                         );
+
                         collectionLogFuture.complete(collectionLog);
                     }
                 });
@@ -435,6 +448,12 @@ public class CollectionLogLuckPlugin extends Plugin {
             callback.accept(collectionLog);
         } catch (IOException | ExecutionException | CancellationException | InterruptedException e) {
             log.error("Unable to retrieve collection log: " + e.getMessage());
+
+            // NOTE: Maybe we should clear the loaded collection logs if this failed.
+            // For now, keep the collectionLogFuture mapping to avoid issues like repeated
+            // spamming the collectionlog.net website if some issue occurs.
+            // loadedCollectionLogs.remove(sanitizedUsername);
+
             callback.accept(null);
         }
     }
