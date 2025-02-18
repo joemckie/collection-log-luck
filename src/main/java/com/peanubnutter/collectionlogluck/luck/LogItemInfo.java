@@ -4213,17 +4213,48 @@ public class LogItemInfo {
             new MissingKillCountDrop());
     public static LogItemInfo MOXI_30154 = new LogItemInfo("Moxi", 30154,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.AMOXLIATL_KILLS, 1.0 / 3000)));
-    public static LogItemInfo GLACIAL_TEMOTLI_29889 = new LogItemInfo("Glacial temotli",29889, new MissingKillCountDrop());
-    public static LogItemInfo PENDANT_OF_ATES_INERT_29892 = new LogItemInfo("Pendant of ates (inert)",29892, new MissingKillCountDrop());
-    public static LogItemInfo FROZEN_TEAR_29895 = new LogItemInfo("Frozen tear",29895, new MissingKillCountDrop());
-    public static LogItemInfo BRAN_30622 = new LogItemInfo("Bran",30622, new UnimplementedDrop());
-    public static LogItemInfo DEADEYE_PRAYER_SCROLL_30626 = new LogItemInfo("Deadeye prayer scroll",30626, new MissingKillCountDrop());
-    public static LogItemInfo MYSTIC_VIGOUR_PRAYER_SCROLL_30627 = new LogItemInfo("Mystic vigour prayer scroll",30627, new MissingKillCountDrop());
-    public static LogItemInfo GIANTSOUL_AMULET_UNCHARGED_30637 = new LogItemInfo("Giantsoul amulet (uncharged)",30637, new UnimplementedDrop());
-    public static LogItemInfo ICE_ELEMENT_STAFF_CROWN_30628 = new LogItemInfo("Ice element staff crown",30628, new MissingKillCountDrop());
-    public static LogItemInfo FIRE_ELEMENT_STAFF_CROWN_30631 = new LogItemInfo("Fire element staff crown",30631, new MissingKillCountDrop());
-    public static LogItemInfo DESICCATED_PAGE_30640 = new LogItemInfo("Desiccated page",30640, new MissingKillCountDrop());
-    public static LogItemInfo HUBERTE_30152 = new LogItemInfo("Huberte",30152,
+    public static LogItemInfo GLACIAL_TEMOTLI_29889 = new LogItemInfo("Glacial temotli", 29889, new MissingKillCountDrop());
+    public static LogItemInfo PENDANT_OF_ATES_INERT_29892 = new LogItemInfo("Pendant of ates (inert)", 29892, new MissingKillCountDrop());
+    public static LogItemInfo FROZEN_TEAR_29895 = new LogItemInfo("Frozen tear", 29895, new MissingKillCountDrop());
+    public static LogItemInfo BRAN_30622 = new LogItemInfo("Bran", 30622,
+            // The pet is supposedly NOT affected by contribution.
+//            new BinomialDrop(new RollInfo(LogItemSourceInfo.ROYAL_TITAN_KILLS, 1.0 / 3000)));
+            new UnimplementedDrop());
+    public static LogItemInfo DEADEYE_PRAYER_SCROLL_30626 = new LogItemInfo("Deadeye prayer scroll", 30626,
+            new InterchangeableSetFiniteBinomialDrop(new RollInfo(LogItemSourceInfo.ROYAL_TITAN_KILLS, 1.0 / 83.33),
+                    ImmutableList.of(30626, 30627),
+                    // You can only get 1 of each scroll... This does make the assumption that the player starts trying to get
+                    // the other prayer scroll once receiving one of them... Otherwise, someone who only ever loots one
+                    // corpse will be considered dry even though it's their fault / choice that they aren't receiving
+                    // both drops.
+                    2
+            ).withConfigOption(CollectionLogLuckConfig.AVG_ROYAL_TITANS_CONTRIBUTION_KEY));
+    public static LogItemInfo MYSTIC_VIGOUR_PRAYER_SCROLL_30627 = new LogItemInfo("Mystic vigour prayer scroll", 30627,
+            new InterchangeableSetFiniteBinomialDrop(new RollInfo(LogItemSourceInfo.ROYAL_TITAN_KILLS, 1.0 / 83.33),
+                    ImmutableList.of(30626, 30627),
+                    // You can only get 1 of each scroll... This does make the assumption that the player starts trying to get
+                    // the other prayer scroll once receiving one of them... Otherwise, someone who only ever loots one
+                    // corpse will be considered dry even though it's their fault / choice that they aren't receiving
+                    // both drops.
+                    2
+            ).withConfigOption(CollectionLogLuckConfig.AVG_ROYAL_TITANS_CONTRIBUTION_KEY));
+    public static LogItemInfo GIANTSOUL_AMULET_UNCHARGED_30637 = new LogItemInfo("Giantsoul amulet (uncharged)", 30637,
+            new BinomialDrop(new RollInfo(LogItemSourceInfo.ROYAL_TITAN_KILLS, 1.0 / 16.67))
+                    .withConfigOption(CollectionLogLuckConfig.AVG_ROYAL_TITANS_CONTRIBUTION_KEY));
+    public static LogItemInfo ICE_ELEMENT_STAFF_CROWN_30628 = new LogItemInfo("Ice element staff crown", 30628,
+            new InterchangeableSetBinomialDrop(
+                    new RollInfo(LogItemSourceInfo.ROYAL_TITAN_KILLS, 1.0 / 83.33),
+                    ImmutableList.of(30628, 30631)
+            ).withConfigOption(CollectionLogLuckConfig.AVG_ROYAL_TITANS_CONTRIBUTION_KEY));
+    public static LogItemInfo FIRE_ELEMENT_STAFF_CROWN_30631 = new LogItemInfo("Fire element staff crown", 30631,
+            new InterchangeableSetBinomialDrop(
+                    new RollInfo(LogItemSourceInfo.ROYAL_TITAN_KILLS, 1.0 / 83.33),
+                    ImmutableList.of(30628, 30631)
+            ).withConfigOption(CollectionLogLuckConfig.AVG_ROYAL_TITANS_CONTRIBUTION_KEY));
+    public static LogItemInfo DESICCATED_PAGE_30640 = new LogItemInfo("Desiccated page", 30640,
+            // missing because there are "take pages" and "destroy corpse for pet chance" options instead of regular loot
+            new MissingKillCountDrop());
+    public static LogItemInfo HUBERTE_30152 = new LogItemInfo("Huberte", 30152,
             new BinomialDrop(new RollInfo(LogItemSourceInfo.HUEYCOATL_KILLS, 1.0 / 400))
                     .withConfigOption(CollectionLogLuckConfig.AVG_HUEYCOATL_CONTRIBUTION_KEY));
     public static LogItemInfo DRAGON_HUNTER_WAND_30070 = new LogItemInfo("Dragon hunter wand", 30070,

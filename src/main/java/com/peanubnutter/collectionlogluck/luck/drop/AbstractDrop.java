@@ -224,6 +224,12 @@ public abstract class AbstractDrop implements DropLuck {
             dropChance *= clampContribution(config.avgHueycoatlContribution());
         }
         else if (
+                rollInfo.getDropSource().equals(LogItemSourceInfo.ROYAL_TITAN_KILLS)
+                        && configOptions.contains(CollectionLogLuckConfig.AVG_ROYAL_TITANS_CONTRIBUTION_KEY)
+        ) {
+            dropChance *= clampContribution(config.avgRoyalTitansContribution());
+        }
+        else if (
                 rollInfo.getDropSource().equals(LogItemSourceInfo.ZALCANO_KILLS)
                         && configOptions.contains(CollectionLogLuckConfig.AVG_ZALCANO_CONTRIBUTION_KEY)
         ) {
