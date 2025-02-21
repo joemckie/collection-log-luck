@@ -336,7 +336,7 @@ public class CollectionLogLuckPlugin extends Plugin {
             int quantity = isObtained ? widgetItem.getItemQuantity() : 0;
 
             // TODO: prepend the key with the player's username if ever supporting adventure log
-            seenItemCounts.put(widgetItem.getId(), quantity);
+            seenItemCounts.put(widgetItem.getItemId(), quantity);
         }
 
         Widget[] children = pageHead.getDynamicChildren();
