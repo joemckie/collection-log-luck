@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+
 import java.util.Map;
+import java.util.TreeMap;
 
 @Getter
 @AllArgsConstructor
@@ -26,6 +28,9 @@ public class CollectionLog
 
     private final Map<String, CollectionLogTab> tabs;
 
+    private final Map<String, CollectionLogItem> collectionLogItemCache = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    private final Map<String, CollectionLogKillCount> collectionLogKillCountCache = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+
     public CollectionLogPage searchForPage(String pageName)
     {
         if (StringUtils.isEmpty(pageName))
@@ -46,24 +51,33 @@ public class CollectionLog
         return null;
     }
 
-    // TODO: initialize map in constructor if this is taking too long.
     public CollectionLogItem searchForItem(String itemName) {
         if (StringUtils.isEmpty(itemName)) {
             return null;
         }
 
-        for (CollectionLogTab tab : tabs.values()) {
-            for (CollectionLogPage page : tab.getPages().values()) {
-                for (CollectionLogItem item : page.getItems()) {
-                    if (itemName.equalsIgnoreCase(item.getName())) {
-                        // Because the total number of items dropped from any page is reported on every such page,
-                        // just return the item the first time it is seen on any page
-                        return item;
+        if (!collectionLogItemCache.containsKey(itemName)) {
+            // if appearing on multiple pages, take the highest amount seen
+            int highestSeen = Integer.MIN_VALUE;
+            CollectionLogItem best = null;
+
+            for (CollectionLogTab tab : tabs.values()) {
+                for (CollectionLogPage page : tab.getPages().values()) {
+                    for (CollectionLogItem item : page.getItems()) {
+                        if (itemName.equalsIgnoreCase(item.getName())) {
+                            if (item.getQuantity() > highestSeen) {
+                                highestSeen = item.getQuantity();
+                                best = item;
+                            }
+                        }
                     }
                 }
             }
+
+            collectionLogItemCache.put(itemName, best);
         }
-        return null;
+
+        return collectionLogItemCache.get(itemName);
     }
 
     public CollectionLogKillCount searchForKillCount(String killCountName) {
@@ -71,16 +85,28 @@ public class CollectionLog
             return null;
         }
 
-        for (CollectionLogTab tab : tabs.values()) {
-            for (CollectionLogPage page : tab.getPages().values()) {
-                for (CollectionLogKillCount killCount : page.getKillCounts()) {
-                    if (killCountName.equalsIgnoreCase(killCount.getName())) {
-                        return killCount;
+        if (!collectionLogKillCountCache.containsKey(killCountName)) {
+            // if appearing on multiple pages, take the highest amount seen
+            int highestSeen = Integer.MIN_VALUE;
+            CollectionLogKillCount best = null;
+
+            for (CollectionLogTab tab : tabs.values()) {
+                for (CollectionLogPage page : tab.getPages().values()) {
+                    for (CollectionLogKillCount killCount : page.getKillCounts()) {
+                        if (killCountName.equalsIgnoreCase(killCount.getName())) {
+                            if (killCount.getAmount() > highestSeen) {
+                                highestSeen = killCount.getAmount();
+                                best = killCount;
+                            }
+                        }
                     }
                 }
             }
+
+            collectionLogKillCountCache.put(killCountName, best);
         }
-        return null;
+
+        return collectionLogKillCountCache.get(killCountName);
     }
 
 }

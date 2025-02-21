@@ -261,8 +261,6 @@ public class CollectionLogLuckPlugin extends Plugin {
         String username = client.getLocalPlayer().getName();
 
         fetchCollectionLog(username, true, collectionLog -> {
-            checkForOutOfSyncCollectionLogData(collectionLog);
-
             // fetching may be async, but we need to be back on client thread to add chat message.
             clientThread.invoke(() -> {
                 String message = buildLuckCommandMessage(collectionLog, checkLuckMatcher.group(2), false);
@@ -295,8 +293,6 @@ public class CollectionLogLuckPlugin extends Plugin {
         String username = getChatMessageSenderUsername(chatMessage);
 
         fetchCollectionLog(username, true, collectionLog -> {
-            checkForOutOfSyncCollectionLogData(collectionLog);
-
             // fetching may be async, but we need to be back on client thread to modify chat message.
             clientThread.invoke(() -> {
                 replaceCommandMessage(chatMessage, message, collectionLog);
@@ -340,7 +336,7 @@ public class CollectionLogLuckPlugin extends Plugin {
             int quantity = isObtained ? widgetItem.getItemQuantity() : 0;
 
             // TODO: prepend the key with the player's username if ever supporting adventure log
-            seenItemCounts.put(widgetItem.getId(), quantity);
+            seenItemCounts.put(widgetItem.getItemId(), quantity);
         }
 
         Widget[] children = pageHead.getDynamicChildren();
@@ -360,7 +356,7 @@ public class CollectionLogLuckPlugin extends Plugin {
         // Update collection log immediately if out of sync errors were found. Note: Assumes this is the local player
         // and not the adventure log.
         // Run in background to avoid delaying collection log rendering.
-        executor.submit(() -> fetchCollectionLog(client.getLocalPlayer().getName(), true, this::checkForOutOfSyncCollectionLogData));
+        executor.submit(() -> fetchCollectionLog(client.getLocalPlayer().getName(), true, collectionLog -> {}));
     }
 
     @Subscribe
@@ -445,6 +441,7 @@ public class CollectionLogLuckPlugin extends Plugin {
                 // Return the value if present, otherwise return null
                 collectionLog = collectionLogFuture.getNow(null);
             }
+            checkForOutOfSyncCollectionLogData(collectionLog);
             callback.accept(collectionLog);
         } catch (IOException | ExecutionException | CancellationException | InterruptedException e) {
             log.error("Unable to retrieve collection log: " + e.getMessage());
@@ -466,9 +463,13 @@ public class CollectionLogLuckPlugin extends Plugin {
         // only correct out of sync issues for the local player
         if (!isLocalPlayerCollectionLog(collectionLog)) return;
 
-        if (desyncReminderSent) return;
+        // TODO: Virtus top is incorrect on my collection log. So is granite dust for GGs
 
         if (fixOutOfSyncCollectionLogData(collectionLog)) {
+            if (desyncReminderSent) {
+                return;
+            }
+
             String warningText =
                     "Collection Log Luck plugin: WARNING: Your collection log is out of sync with collectionlog.net." +
                     " If you send a !luck chat message, other players may see out of date data." +
@@ -501,8 +502,11 @@ public class CollectionLogLuckPlugin extends Plugin {
             String incalculableReason = logItemInfo.getDropProbabilityDistribution().getIncalculableReason(item, config);
             if (incalculableReason != null) continue;
 
+            // Whatever is seen in game should be authoritative, so use the in-game value even if the collectionlog.net
+            // has a higher value. This also protects against corrupt (or manipulated) data on collectionlog.net.
             if (seenItemCounts.get(itemId) != item.getQuantity()) {
                 item.setQuantity(seenItemCounts.get(itemId));
+
                 foundDesync = true;
             }
         }
