@@ -463,8 +463,6 @@ public class CollectionLogLuckPlugin extends Plugin {
         // only correct out of sync issues for the local player
         if (!isLocalPlayerCollectionLog(collectionLog)) return;
 
-        // TODO: Virtus top is incorrect on my collection log. So is granite dust for GGs
-
         if (fixOutOfSyncCollectionLogData(collectionLog)) {
             if (desyncReminderSent) {
                 return;
