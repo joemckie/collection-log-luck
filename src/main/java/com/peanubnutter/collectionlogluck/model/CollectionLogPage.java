@@ -165,14 +165,14 @@ public class CollectionLogPage
 			case "veti":
 				return "Vet'ion and Calvar'ion";
 			case "vork":
-			case "vorki":
+				// DO NOT add "vorki" here, since it is the name of the pet.
 				return "Vorkath";
 			case "wt":
 			case "todt":
 				return "Wintertodt";
 			case "whisperer":
-			case "wisp":
 			case "whisp":
+				// DO NOT add "wisp" here, since it is the name of the pet.
 				return "The Whisperer";
 			case "zalc":
 				return "Zalcano";
