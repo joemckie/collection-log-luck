@@ -44,7 +44,9 @@ public class CollectionLogDeserializer implements JsonDeserializer<CollectionLog
                     // Example: (Farmer's shirt,13643)
 //                    LogItemInfo logItemInfo = LogItemInfo.findByName(newItem.getName());
 //                    if (logItemInfo == null) {
-//                        System.out.println("New collection log item detected!:(" + newItem.getName() + "," + newItem.getId() + ")");
+//                        // import org.slf4j.* for these to work
+//                        Logger logger = LoggerFactory.getLogger(CollectionLogDeserializer.class);
+//                        logger.error("New collection log item detected!:(" + newItem.getName() + "," + newItem.getId() + ")");
 //                    }
 
                     newItems.add(newItem);
@@ -65,7 +67,9 @@ public class CollectionLogDeserializer implements JsonDeserializer<CollectionLog
                         // Uncomment to update LogItemSourceInfo list
 //                        LogItemSourceInfo logItemSourceInfo = LogItemSourceInfo.findByName(newKillCount.getName());
 //                        if (logItemSourceInfo == null) {
-//                            System.out.println("!!!!!!!!!!New collection log page detected!: (" + newKillCount.getName() + ")");
+                              // import org.slf4j.* for these to work
+//                            Logger logger = LoggerFactory.getLogger(CollectionLogDeserializer.class);
+//                            logger.error("!!!!!!!!!!New collection log page detected!: (" + newKillCount.getName() + ")");
 //                        }
                     }
                 }
