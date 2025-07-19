@@ -138,6 +138,9 @@ public class CollectionLogLuckPlugin extends Plugin {
 	private static final Map<Integer, Set<String>> collectionLogCategoryTabSlugs = new LinkedHashMap<>();
 
 	@Getter
+	private static final Map<Integer, String> collectionLogCategoryKcs = new HashMap<>();
+
+	@Getter
 	@Setter
 	private boolean triggerSyncAllowed;
 
@@ -208,6 +211,7 @@ public class CollectionLogLuckPlugin extends Plugin {
 			collectionLogCategoryItemMap.putAll(collectionLogCacheData.getCategoryItems());
 			collectionLogCategoryStructIdMap.putAll(collectionLogCacheData.getCategoryStructIds());
 			collectionLogCategoryTabSlugs.putAll(collectionLogCacheData.getCategorySlugs());
+			collectionLogCategoryKcs.putAll(collectionLogCacheData.getCategoryKcs());
 
 			return true;
 		});
