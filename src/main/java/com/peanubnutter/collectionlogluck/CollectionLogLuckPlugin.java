@@ -8,22 +8,30 @@ import com.peanubnutter.collectionlogluck.luck.LuckCalculationResult;
 import com.peanubnutter.collectionlogluck.luck.drop.AbstractDrop;
 import com.peanubnutter.collectionlogluck.luck.drop.DropLuck;
 import com.peanubnutter.collectionlogluck.model.CollectionLog;
+import com.peanubnutter.collectionlogluck.model.CollectionLogCacheData;
 import com.peanubnutter.collectionlogluck.model.CollectionLogItem;
 import com.peanubnutter.collectionlogluck.model.CollectionLogKillCount;
 import com.peanubnutter.collectionlogluck.model.CollectionLogPage;
+import com.peanubnutter.collectionlogluck.model.ObtainedCollectionItem;
 import com.peanubnutter.collectionlogluck.util.CollectionLogBuilder;
 import com.peanubnutter.collectionlogluck.util.CollectionLogLuckApiClient;
 import com.peanubnutter.collectionlogluck.util.JsonUtils;
 import com.peanubnutter.collectionlogluck.util.LuckUtils;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.ScriptPostFired;
+import net.runelite.api.events.ScriptPreFired;
 import net.runelite.api.events.WidgetLoaded;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.ComponentID;
-import net.runelite.api.widgets.InterfaceID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.chat.ChatCommandManager;
@@ -97,6 +105,42 @@ public class CollectionLogLuckPlugin extends Plugin {
 
     private boolean isPohOwner = false;
 
+	/**
+	 * List of items found in the collection log, computed by reading the in-game enums/structs.
+	 */
+	private final Set<Integer> collectionLogItemsFromCache = new HashSet<>();
+
+	/**
+	 * Unique list of all obtained collection log items
+	 */
+	@Getter
+	private final Set<ObtainedCollectionItem> obtainedCollectionLogItems = new HashSet<>();
+
+	/**
+	 * Maps in-game categories to the list of items they contain. Pulled from the in-game cache, where the key is the
+	 * category struct ID (e.g. <a href="https://chisel.weirdgloop.org/structs/index.html?type=structs&id=493">STRUCT #493</a>)
+	 * and the value is the contents of the enum found in <a href="https://chisel.weirdgloop.org/structs/index.html?type=params&id=690">PARAM #690</a>.
+	 */
+	@Getter
+	private static final Map<Integer, Set<Integer>> collectionLogCategoryItemMap = new HashMap<>();
+
+	/**
+	 * Maps slugified category names (e.g. guardians_of_the_rift) to their in-game struct ID
+	 */
+	@Getter
+	private static final Map<String, Integer> collectionLogCategoryStructIdMap = new HashMap<>();
+
+	/**
+	 * Maps top level tabs (e.g. "Bosses") to their containing categories.
+	 * Used to list the available categories when using the "!col help ___" commands
+	 */
+	@Getter
+	private static final Map<Integer, Set<String>> collectionLogCategoryTabSlugs = new LinkedHashMap<>();
+
+	@Getter
+	@Setter
+	private boolean triggerSyncAllowed;
+
     @Getter
     @Inject
     private Client client;
@@ -151,6 +195,22 @@ public class CollectionLogLuckPlugin extends Plugin {
         desyncReminderSent = false;
 
         chatCommandManager.registerCommandAsync(COLLECTION_LOG_LUCK_COMMAND_STRING, this::processLuckCommandMessage);
+
+		clientThread.invoke(() -> {
+			if (client.getIndexConfig() == null || client.getGameState().ordinal() < GameState.LOGIN_SCREEN.ordinal() || configManager.getRSProfileKey() == null)
+			{
+				return false;
+			}
+
+			CollectionLogCacheData collectionLogCacheData = parseCacheForClog();
+
+			collectionLogItemsFromCache.addAll(collectionLogCacheData.getItemIds());
+			collectionLogCategoryItemMap.putAll(collectionLogCacheData.getCategoryItems());
+			collectionLogCategoryStructIdMap.putAll(collectionLogCacheData.getCategoryStructIds());
+			collectionLogCategoryTabSlugs.putAll(collectionLogCacheData.getCategorySlugs());
+
+			return true;
+		});
     }
 
     @Override
@@ -162,7 +222,7 @@ public class CollectionLogLuckPlugin extends Plugin {
         chatCommandManager.unregisterCommand(COLLECTION_LOG_LUCK_COMMAND_STRING);
     }
 
-    protected void clearCache() {
+	protected void clearCache() {
         loadedCollectionLogIcons.clear();
         loadedCollectionLogs.clear();
         luckCalculationResults.clear();
@@ -293,11 +353,38 @@ public class CollectionLogLuckPlugin extends Plugin {
         });
     }
 
+	@Subscribe
+	public void onScriptPreFired(ScriptPreFired preFired)
+	{
+		if (preFired.getScriptId() == 4100)
+		{
+			if (collectionLogItemsFromCache.isEmpty())
+			{
+				return;
+			}
+
+			Object[] args = preFired.getScriptEvent().getArguments();
+			int itemId = (int) args[1];
+			int itemCount = (int) args[2];
+			String itemName = itemManager.getItemComposition(itemId).getName();
+
+			obtainedCollectionLogItems.add(new ObtainedCollectionItem(itemId, itemName, itemCount));
+		}
+	}
+
     @Subscribe
     public void onScriptPostFired(ScriptPostFired scriptPostFired) {
-        if (scriptPostFired.getScriptId() == ScriptID.COLLECTION_DRAW_LIST) {
-            clientThread.invokeLater(this::cacheCollectionLogPageData);
-        }
+		if (scriptPostFired.getScriptId() == 7797 && isTriggerSyncAllowed())
+		{
+			log.debug(configManager.getRSProfileConfiguration("killcount", "kree'arra"));
+
+			clientThread.invokeLater(() -> {
+				client.menuAction(-1, 40697932, MenuAction.CC_OP, 1, -1, "Search", null);
+				client.menuAction(-1, 40697932, MenuAction.CC_OP, 1, -1, "Back", null);
+
+				setTriggerSyncAllowed(false);
+			});
+		}
     }
 
     // The general strategy is to cache any item counts we've seen, and then whenever the player tries to get
@@ -358,7 +445,15 @@ public class CollectionLogLuckPlugin extends Plugin {
             return;
         }
 
-        if (widgetLoaded.getGroupId() == InterfaceID.ADVENTURE_LOG) {
+		if (widgetLoaded.getGroupId() == InterfaceID.COLLECTION)
+		{
+			setTriggerSyncAllowed(true);
+
+			// Clear the previously obtained item list to avoid duplicating items when counts change
+			getObtainedCollectionLogItems().clear();
+		}
+
+		if (widgetLoaded.getGroupId() == InterfaceID.MENU) {
             Widget adventureLog = client.getWidget(ComponentID.ADVENTURE_LOG_CONTAINER);
             if (adventureLog == null) {
                 return;
@@ -792,4 +887,82 @@ public class CollectionLogLuckPlugin extends Plugin {
         }
     }
 
+	/**
+	 * Parse the enums and structs in the cache to figure out which item ids exist in the collection log.
+	 */
+	private CollectionLogCacheData parseCacheForClog()
+	{
+		Set<Integer> items = new HashSet<>();
+		Map<Integer, Set<Integer>> categoryItems = new HashMap<>();
+		Map<Integer, String> categoryKcs = new HashMap<>();
+		Map<String, Integer> categoryStructIds = new HashMap<>();
+		Map<Integer, Set<String>> categorySlugs = new LinkedHashMap<>();
+
+		final Pattern specialCharacterPattern = Pattern.compile("['()]", Pattern.CASE_INSENSITIVE);
+
+		// Some items with data saved on them have replacements to fix a duping issue (satchels, flamtaer bag)
+		// Enum 3721 contains a mapping of the item ids to replace -> ids to replace them with
+		EnumComposition replacements = client.getEnum(3721);
+
+		// 2102 - Struct that contains the highest level tabs in the collection log (Bosses, Raids, etc)
+		// https://chisel.weirdgloop.org/structs/index.html?type=enums&id=2102
+		int[] topLevelTabStructIds = client.getEnum(2102).getIntVals();
+		for (int topLevelTabStructIndex : topLevelTabStructIds)
+		{
+			// The collection log top level tab structs contain a param that points to the enum
+			// that contains the pointers to sub tabs.
+			// ex: https://chisel.weirdgloop.org/structs/index.html?type=structs&id=471
+			StructComposition topLevelTabStruct = client.getStructComposition(topLevelTabStructIndex);
+
+			Set<String> singleCategorySlugSet = new LinkedHashSet<>();
+
+			// Param 683 contains the pointer to the enum that contains the subtabs ids
+			// ex: https://chisel.weirdgloop.org/structs/index.html?type=enums&id=2103
+			int[] subtabStructIndices = client.getEnum(topLevelTabStruct.getIntValue(683)).getIntVals();
+			for (int subtabStructIndex : subtabStructIndices)
+			{
+
+				// The subtab structs are for subtabs in the collection log (Commander Zilyana, Chambers of Xeric, etc.)
+				// and contain a pointer to the enum that contains all the item ids for that tab.
+				// ex subtab struct: https://chisel.weirdgloop.org/structs/index.html?type=structs&id=476
+				// ex subtab enum: https://chisel.weirdgloop.org/structs/index.html?type=enums&id=2109
+				StructComposition subtabStruct = client.getStructComposition(subtabStructIndex);
+
+				int[] clogItems = client.getEnum(subtabStruct.getIntValue(690)).getIntVals();
+				String rawCategoryName = subtabStruct.getStringValue(689);
+
+				// Gets a slugified version of the category title
+				// (e.g. Master Treasure Trails (Rare) -> master_treasure_trails_rare)
+				String normalizedCategoryName = specialCharacterPattern
+					.matcher(
+						rawCategoryName
+							.replaceAll(" ", "_")
+					)
+					.replaceAll("");
+
+				Set<Integer> itemSet = new LinkedHashSet<>();
+
+				for (int clogItemId : clogItems)
+				{
+					final int replacementId = replacements.getIntValue(clogItemId);
+
+					itemSet.add(
+						replacementId == -1
+							? clogItemId
+							: replacementId
+					);
+				}
+
+				items.addAll(itemSet);
+				categoryItems.put(subtabStructIndex, itemSet);
+				categoryStructIds.put(normalizedCategoryName, subtabStructIndex);
+				singleCategorySlugSet.add(normalizedCategoryName);
+				categoryKcs.put(subtabStructIndex, configManager.getRSProfileConfiguration("killcount", rawCategoryName.toLowerCase()));
+			}
+
+			categorySlugs.put(topLevelTabStructIndex, singleCategorySlugSet);
+		}
+
+		return new CollectionLogCacheData(items, categoryItems, categoryStructIds, categorySlugs, categoryKcs);
+	}
 }
